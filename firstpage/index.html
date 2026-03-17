@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Nabila</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-deco" style="left:6%;  animation-duration:13s; animation-delay:0s;">🎈</div>
+<div class="bg-deco" style="left:22%; animation-duration:9s;  animation-delay:3s; font-size:34px;">⭐</div>
+<div class="bg-deco" style="left:55%; animation-duration:16s; animation-delay:1s; font-size:54px;">🎉</div>
+<div class="bg-deco" style="left:78%; animation-duration:11s; animation-delay:4s;">🎁</div>
+<div class="bg-deco" style="left:90%; animation-duration:14s; animation-delay:2s; font-size:40px;">🎂</div>
+
+<div id="wrapper">
+
+  <!-- PHASE 1: GREETING -->
+  <div class="phase active" id="phaseGreet">
+    <p class="eyebrow">a birthday surprise for</p>
+    <h1 class="hero-name">Nabila<br>Aulia Rahma</h1>
+    <p class="hero-sub">Selamat ulang tahun <strong>Zezell !</strong> <br>Ada sesuatu yang spesial udah disiapkan buat kamu</p>
+    <div class="cake-bounce">🎁</div>
+    <button class="btn-pink" id="startBtn">Next!</button>
+  </div>
+
+  <!-- PHASE 2: MISSION BRIEFING -->
+  <div class="phase" id="phaseMission">
+    <p class="eyebrow">misi sebelum kado</p>
+    <h2 class="section-title">Kado Spesial<br>Menantimu!</h2>
+    <p class="section-sub">Tapi buat buka kadonya, kamu harus<br><strong>selesaiin 3 mini game</strong> dulu yeah</p>
+
+    <div class="mission-list">
+      <div class="mission-card" style="--delay:0.05s">
+        <div class="mission-num">1</div>
+        <div class="mission-info">
+          <div class="m-title">Birthday Tap Blast</div>
+          <div class="m-sub">Tangkap 24 item dalam 30 detik</div>
+        </div>
+      </div>
+      <div class="mission-card" style="--delay:0.18s">
+        <div class="mission-num">2</div>
+        <div class="mission-info">
+          <div class="m-title">Birthday Tic-Tac-Toe</div>
+          <div class="m-sub">Kalahkan Bahlil di papan 3×3</div>
+        </div>
+      </div>
+      <div class="mission-card" style="--delay:0.31s">
+        <div class="mission-num">3</div>
+        <div class="mission-info">
+          <div class="m-title">Rock Paper Scissors</div>
+          <div class="m-sub">Menangkan 3 ronde lawan Bahlil</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reward-pill">
+      🎁 &nbsp;Selesaikan semua misi → kado spesial terbuka!
+    </div>
+
+    <button class="btn-yellow" id="goBtn">Start!</button>
+  </div>
+
+  <!-- PHASE 3: COUNTDOWN -->
+  <div class="phase" id="phaseCountdown">
+    <p class="countdown-label">Game dimulai dalam...</p>
+    <div class="countdown-ring">
+      <span class="countdown-num" id="countNum">3</span>
+    </div>
+    <p class="countdown-sub" id="countSub">Siapkan jarimu!</p>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,518 @@
+:root {
+    --pink:   #ff6eb4;
+    --yellow: #ffe066;
+    --purple: #c77dff;
+    --mint:   #72efdd;
+    --coral:  #ff9a8b;
+    --w15: rgba(255,255,255,0.15);
+    --w30: rgba(255,255,255,0.30);
+    --w55: rgba(255,255,255,0.55);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(160deg, #ff9de2 0%, #ffcf77 40%, #ff6eb4 75%, #c77dff 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    /* FIX: hapus overflow:hidden, ganti overflow-x saja */
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: white;
+}
+
+/* ===== BG FLOATERS ===== */
+.bg-deco {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    font-size: 44px;
+    opacity: 0.10;
+    animation: floatDeco linear infinite;
+}
+@keyframes floatDeco {
+    0%   { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-10vh) rotate(360deg); }
+}
+
+/* ===== MUSIC BUTTON ===== */
+#musicBtn {
+    position: fixed;
+    top: 14px;
+    right: 16px;
+    z-index: 100;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid var(--w55);
+    background: var(--w15);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+#musicBtn:hover { transform: scale(1.12); background: var(--w30); }
+#musicBtn.playing { animation: musicPulse 1.5s ease-in-out infinite; }
+@keyframes musicPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,224,102,0.5); }
+    50%     { box-shadow: 0 0 0 8px rgba(255,224,102,0); }
+}
+
+/* ===== PAGE SYSTEM ===== */
+.page {
+    display: none;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* FIX: padding lebih kecil + safe area top buat music btn */
+    padding: 64px 16px 24px;
+    gap: 12px;
+}
+.page.active { display: flex; }
+.page.slide-in {
+    animation: slideIn 0.45s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===== SHARED TYPOGRAPHY ===== */
+.title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(22px, 5vw, 40px);
+    color: #fff;
+    text-shadow: 3px 3px 0 #e040a0, 6px 6px 0 rgba(200,0,100,0.22);
+    animation: titlePop 0.6s cubic-bezier(.36,2,.6,1) both;
+    text-align: center;
+}
+@keyframes titlePop {
+    from { transform: scale(0.5) rotate(-8deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.subtitle {
+    font-size: clamp(12px, 2.5vw, 14px);
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+    margin-top: -6px;
+    line-height: 1.5;
+}
+
+/* ===== STAT PILL ===== */
+.stat-pill {
+    background: var(--w15);
+    backdrop-filter: blur(8px);
+    border: 2px solid var(--w55);
+    border-radius: 50px;
+    padding: 5px 16px;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 80px;
+    justify-content: center;
+}
+.stat-pill .val {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    color: var(--yellow);
+}
+.stat-pill.danger .val {
+    color: #ff4d4d;
+    animation: pulse 0.5s ease infinite alternate;
+}
+@keyframes pulse {
+    from { transform: scale(1); }
+    to   { transform: scale(1.2); }
+}
+
+/* ===== BUTTONS ===== */
+.action-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(13px, 3vw, 16px);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: 0.4px;
+}
+.action-btn:hover  { transform: translateY(-3px) scale(1.04); }
+.action-btn:active { transform: scale(0.97); }
+
+.btn-pink {
+    background: linear-gradient(135deg, #ff6eb4, #c040a0);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(200,50,150,0.4);
+}
+.btn-yellow {
+    background: linear-gradient(135deg, #ffe066, #ffaa00);
+    color: #7a3800;
+    box-shadow: 0 6px 20px rgba(255,170,0,0.45);
+}
+.btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+    0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===========================
+   PAGE 1 — CATCHING GAME
+=========================== */
+.top-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#gameContainer {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    /* FIX: height pakai vh yang lebih kecil biar muat di layar */
+    height: clamp(220px, 42vh, 400px);
+    background: var(--w15);
+    backdrop-filter: blur(6px);
+    border: 3px solid var(--w55);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(200,50,150,0.2), inset 0 0 40px rgba(255,255,255,0.06);
+}
+#gameContainer::before, #gameContainer::after {
+    content: '✨';
+    position: absolute;
+    font-size: 20px;
+    animation: twinkle 2s ease-in-out infinite alternate;
+}
+#gameContainer::before { top: 8px; left: 12px; }
+#gameContainer::after  { top: 8px; right: 12px; animation-delay: 0.8s; }
+@keyframes twinkle {
+    from { opacity: 0.4; transform: scale(0.9) rotate(-10deg); }
+    to   { opacity: 1;   transform: scale(1.2) rotate(10deg); }
+}
+
+.item {
+    position: absolute;
+    font-size: clamp(28px, 6vw, 36px);
+    cursor: pointer;
+    animation: fall linear forwards;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    user-select: none;
+    -webkit-user-select: none;
+}
+.item:hover { transform: scale(1.25); }
+.item.clicked {
+    animation: popOut 0.3s ease forwards !important;
+    pointer-events: none;
+}
+@keyframes fall {
+    from { top: -60px; }
+    to   { top: 110%; }
+}
+@keyframes popOut {
+    0%   { transform: scale(1);   opacity: 1; }
+    50%  { transform: scale(1.8); opacity: 0.7; }
+    100% { transform: scale(0);   opacity: 0; }
+}
+
+.score-pop {
+    position: absolute;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    color: var(--yellow);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    pointer-events: none;
+    animation: scorePop 0.8s ease forwards;
+    z-index: 10;
+}
+@keyframes scorePop {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-60px) scale(0.5); opacity: 0; }
+}
+
+#p1message {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(14px, 3.5vw, 22px);
+    color: #fff;
+    text-shadow: 2px 2px 0 #c040a0;
+    min-height: 28px;
+    text-align: center;
+}
+
+.progress-wrap {
+    width: 100%;
+    max-width: 600px;
+    height: 8px;
+    background: var(--w15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+#progressBar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--yellow), var(--pink));
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+/* ===========================
+   PAGE 2 — TIC-TAC-TOE
+=========================== */
+.scoreboard {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.score-card {
+    background: var(--w15);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--w55);
+    border-radius: 16px;
+    padding: 8px 16px;
+    text-align: center;
+    min-width: 72px;
+    transition: transform 0.2s;
+}
+.score-card.active {
+    border-color: var(--yellow);
+    background: rgba(255,224,102,0.18);
+    transform: scale(1.06);
+}
+.score-card .player-icon { font-size: 22px; line-height: 1; }
+.score-card .player-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin: 2px 0;
+}
+.score-card .player-score {
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    color: var(--yellow);
+    line-height: 1;
+}
+.vs-badge {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+}
+
+#turnIndicator {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(14px, 3.5vw, 18px);
+    color: #fff;
+    background: var(--w15);
+    backdrop-filter: blur(8px);
+    border: 2px solid var(--w30);
+    border-radius: 50px;
+    padding: 5px 20px;
+    text-align: center;
+    min-width: 180px;
+    transition: all 0.3s;
+}
+
+#tttBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 12px;
+    background: var(--w15);
+    backdrop-filter: blur(10px);
+    border: 3px solid var(--w55);
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(180,50,150,0.25), inset 0 0 30px rgba(255,255,255,0.06);
+    animation: boardIn 0.5s cubic-bezier(.36,2,.6,1) 0.1s both;
+}
+@keyframes boardIn {
+    from { transform: scale(0.7) rotate(-4deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.cell {
+    /* FIX: ukuran cell lebih responsif */
+    width:  clamp(68px, 15vw, 100px);
+    height: clamp(68px, 15vw, 100px);
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(26px, 6vw, 44px);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s, border-color 0.15s;
+    position: relative;
+    overflow: hidden;
+}
+.cell:hover:not(.taken) {
+    background: rgba(255,255,255,0.30);
+    transform: scale(1.05);
+    border-color: var(--yellow);
+}
+.cell.taken  { cursor: default; }
+.cell.x-cell { border-color: rgba(255,100,180,0.7); }
+.cell.o-cell { border-color: rgba(110,240,200,0.7); }
+.cell.win-cell {
+    background: rgba(255,224,102,0.30) !important;
+    border-color: var(--yellow) !important;
+    animation: winPulse 0.6s ease infinite alternate;
+}
+@keyframes winPulse {
+    from { transform: scale(1);    box-shadow: none; }
+    to   { transform: scale(1.07); box-shadow: 0 0 20px rgba(255,224,102,0.6); }
+}
+.cell-mark {
+    animation: markPop 0.3s cubic-bezier(.36,2,.6,1) both;
+}
+@keyframes markPop {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+}
+
+#p2message {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(14px, 3.5vw, 22px);
+    color: #fff;
+    text-shadow: 2px 2px 0 #b030a0;
+    min-height: 28px;
+    text-align: center;
+}
+
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-8px); }
+    40%     { transform: translateX(8px); }
+    60%     { transform: translateX(-6px); }
+    80%     { transform: translateX(6px); }
+}
+
+/* ===========================
+   PAGE 3 — KERTAS GUNTING BATU
+=========================== */
+#rpsArena {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--w15);
+    backdrop-filter: blur(8px);
+    border: 3px solid var(--w55);
+    border-radius: 24px;
+    padding: 16px 24px;
+    box-shadow: 0 8px 32px rgba(200,50,150,0.2);
+    animation: boardIn 0.5s cubic-bezier(.36,2,.6,1) 0.1s both;
+    width: 100%;
+    max-width: 360px;
+}
+
+.rps-hand {
+    font-size: clamp(44px, 10vw, 72px);
+    min-width: 70px;
+    text-align: center;
+    transition: transform 0.2s;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+}
+
+#rpsVs {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    color: rgba(255,255,255,0.6);
+}
+
+.rps-hand.shake {
+    animation: rpsShake 0.5s ease;
+}
+@keyframes rpsShake {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    25%     { transform: translateY(-14px) rotate(-10deg); }
+    50%     { transform: translateY(0) rotate(10deg); }
+    75%     { transform: translateY(-8px) rotate(-6deg); }
+}
+
+.rps-hand.reveal {
+    animation: rpsReveal 0.4s cubic-bezier(.36,2,.6,1) both;
+}
+@keyframes rpsReveal {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+}
+
+#rpsResult {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(15px, 3.5vw, 24px);
+    color: #fff;
+    text-shadow: 2px 2px 0 #c040a0;
+    min-height: 32px;
+    text-align: center;
+    padding: 0 8px;
+}
+
+.rps-choices {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.rps-btn {
+    width:  clamp(62px, 14vw, 84px);
+    height: clamp(62px, 14vw, 84px);
+    border-radius: 50%;
+    border: 3px solid var(--w55);
+    background: var(--w15);
+    backdrop-filter: blur(8px);
+    font-size: clamp(24px, 6vw, 36px);
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s, border-color 0.15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.rps-btn:hover {
+    transform: scale(1.15) translateY(-4px);
+    background: rgba(255,255,255,0.28);
+    border-color: var(--yellow);
+}
+.rps-btn:active { transform: scale(0.95); }
+.rps-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.rps-choice-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.04em;
+    text-align: center;
+}

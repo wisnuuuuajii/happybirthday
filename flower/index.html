@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Line Art Portrait</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0d0d0f;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      gap: 20px;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: clamp(18px, 4vw, 26px);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    #dropZone {
+      width: min(420px, 92vw);
+      height: 180px;
+      border: 2px dashed rgba(255,255,255,0.18);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: rgba(255,255,255,0.03);
+    }
+    #dropZone:hover, #dropZone.drag { border-color: rgba(255,100,100,0.6); background: rgba(255,50,50,0.06); }
+    #dropZone .dz-icon { font-size: 36px; }
+    #dropZone .dz-label { font-size: 14px; color: rgba(255,255,255,0.45); letter-spacing: 0.06em; }
+    #dropZone .dz-sub { font-size: 11px; color: rgba(255,255,255,0.25); }
+    #fileInput { display: none; }
+
+    #canvasWrap {
+      display: none;
+      position: relative;
+    }
+    canvas {
+      border-radius: 16px;
+      display: block;
+      max-width: min(520px, 94vw);
+      max-height: 70vh;
+    }
+    #hiddenCanvas { display: none; }
+
+    #controls {
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 50px;
+      padding: 10px 20px;
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ctrl-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    input[type=range] {
+      width: 80px;
+      accent-color: #c0392b;
+    }
+
+    button {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.75);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    button:hover { background: rgba(255,255,255,0.14); transform: scale(1.04); }
+    button.red {
+      background: rgba(180,20,20,0.3);
+      border-color: rgba(200,50,50,0.4);
+      color: #ff9a9a;
+    }
+    button.red:hover { background: rgba(200,30,30,0.45); }
+
+    #status {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.06em;
+      min-height: 18px;
+    }
+
+    .color-btns {
+      display: flex;
+      gap: 6px;
+    }
+    .color-dot {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .color-dot:hover { transform: scale(1.2); }
+    .color-dot.active { border-color: white; }
+  </style>
+</head>
+<body>
+
+<h1>Line Art Portrait</h1>
+
+<div id="dropZone">
+  <div class="dz-icon">🖼️</div>
+  <div class="dz-label">Upload foto kamu</div>
+  <div class="dz-sub">klik atau drag & drop</div>
+  <input type="file" id="fileInput" accept="image/*">
+</div>
+
+<div id="canvasWrap">
+  <canvas id="outputCanvas"></canvas>
+</div>
+<canvas id="hiddenCanvas"></canvas>
+
+<div id="controls">
+  <div class="ctrl-group">
+    <span class="ctrl-label">density</span>
+    <input type="range" id="densitySlider" min="1" max="5" step="0.5" value="2.5">
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">threshold</span>
+    <input type="range" id="threshSlider" min="10" max="120" step="5" value="45">
+  </div>
+  <div class="ctrl-group">
+    <span class="ctrl-label">warna</span>
+    <div class="color-btns">
+      <div class="color-dot active" data-color="#ffffff" style="background:#ffffff;" title="putih"></div>
+      <div class="color-dot" data-color="#ff6b6b" style="background:#ff6b6b;" title="merah"></div>
+      <div class="color-dot" data-color="#72efdd" style="background:#72efdd;" title="teal"></div>
+      <div class="color-dot" data-color="#ffe066" style="background:#ffe066;" title="kuning"></div>
+      <div class="color-dot" data-color="#c77dff" style="background:#c77dff;" title="ungu"></div>
+    </div>
+  </div>
+  <button id="reRender">render ulang</button>
+  <button id="saveBtn">simpan 💾</button>
+  <button class="red" id="resetBtn">ganti foto</button>
+</div>
+
+<div id="status"></div>
+
+<script>
+// ── state ────────────────────────────────────────────────────
+let sourceImage  = null;
+let lineColor    = '#ffffff';
+let animFrame;
+
+const dropZone      = document.getElementById('dropZone');
+const fileInput     = document.getElementById('fileInput');
+const outputCanvas  = document.getElementById('outputCanvas');
+const hiddenCanvas  = document.getElementById('hiddenCanvas');
+const canvasWrap    = document.getElementById('canvasWrap');
+const controls      = document.getElementById('controls');
+const statusEl      = document.getElementById('status');
+const densitySlider = document.getElementById('densitySlider');
+const threshSlider  = document.getElementById('threshSlider');
+const ctx           = outputCanvas.getContext('2d');
+const hctx          = hiddenCanvas.getContext('2d');
+
+// ── upload handling ──────────────────────────────────────────
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag');
+  loadFile(e.dataTransfer.files[0]);
+});
+
+function loadFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      sourceImage = img;
+      dropZone.style.display = 'none';
+      canvasWrap.style.display = 'block';
+      controls.style.display  = 'flex';
+      render();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── color picker ─────────────────────────────────────────────
+document.querySelectorAll('.color-dot').forEach(dot => {
+  dot.addEventListener('click', () => {
+    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+    dot.classList.add('active');
+    lineColor = dot.dataset.color;
+    render();
+  });
+});
+
+// ── sliders ──────────────────────────────────────────────────
+densitySlider.addEventListener('input', render);
+threshSlider.addEventListener('input', render);
+document.getElementById('reRender').addEventListener('click', render);
+
+// ── reset ────────────────────────────────────────────────────
+document.getElementById('resetBtn').addEventListener('click', () => {
+  sourceImage = null;
+  cancelAnimationFrame(animFrame);
+  dropZone.style.display  = 'flex';
+  canvasWrap.style.display = 'none';
+  controls.style.display  = 'none';
+  statusEl.textContent    = '';
+  fileInput.value = '';
+});
+
+// ── save ─────────────────────────────────────────────────────
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.download = 'lineart.png';
+  a.href = outputCanvas.toDataURL('image/png');
+  a.click();
+});
+
+// ── RENDER ───────────────────────────────────────────────────
+function render() {
+  if (!sourceImage) return;
+  cancelAnimationFrame(animFrame);
+  statusEl.textContent = 'memproses...';
+
+  // ── setup canvas sizes ──────────────────────────────────
+  const maxW = Math.min(520, window.innerWidth * 0.94);
+  const maxH = window.innerHeight * 0.68;
+  let w = sourceImage.width;
+  let h = sourceImage.height;
+  const scale = Math.min(maxW / w, maxH / h, 1);
+  w = Math.floor(w * scale);
+  h = Math.floor(h * scale);
+
+  outputCanvas.width  = w;
+  outputCanvas.height = h;
+  hiddenCanvas.width  = w;
+  hiddenCanvas.height = h;
+
+  // ── draw source to hidden canvas ────────────────────────
+  hctx.drawImage(sourceImage, 0, 0, w, h);
+  const imageData = hctx.getImageData(0, 0, w, h);
+  const data      = imageData.data;
+
+  // ── grayscale + edge detection (Sobel) ──────────────────
+  const gray = new Float32Array(w * h);
+  for (let i = 0; i < w * h; i++) {
+    const r = data[i*4], g = data[i*4+1], b = data[i*4+2];
+    gray[i] = 0.299*r + 0.587*g + 0.114*b;
+  }
+
+  const edges = new Float32Array(w * h);
+  let maxEdge = 0;
+  for (let y = 1; y < h-1; y++) {
+    for (let x = 1; x < w-1; x++) {
+      const idx = y*w + x;
+      // Sobel kernel
+      const gx =
+        -gray[(y-1)*w+(x-1)] + gray[(y-1)*w+(x+1)]
+        -2*gray[y*w+(x-1)]   + 2*gray[y*w+(x+1)]
+        -gray[(y+1)*w+(x-1)] + gray[(y+1)*w+(x+1)];
+      const gy =
+        -gray[(y-1)*w+(x-1)] - 2*gray[(y-1)*w+x] - gray[(y-1)*w+(x+1)]
+        +gray[(y+1)*w+(x-1)] + 2*gray[(y+1)*w+x] + gray[(y+1)*w+(x+1)];
+      const mag = Math.sqrt(gx*gx + gy*gy);
+      edges[idx] = mag;
+      if (mag > maxEdge) maxEdge = mag;
+    }
+  }
+
+  // ── collect edge points above threshold ─────────────────
+  const threshold = parseFloat(threshSlider.value) / 255 * maxEdge;
+  const edgePts   = [];
+  for (let y = 1; y < h-1; y++) {
+    for (let x = 1; x < w-1; x++) {
+      if (edges[y*w+x] > threshold) {
+        edgePts.push({ x, y, strength: edges[y*w+x] / maxEdge });
+      }
+    }
+  }
+
+  // ── shuffle edge points ──────────────────────────────────
+  for (let i = edgePts.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [edgePts[i], edgePts[j]] = [edgePts[j], edgePts[i]];
+  }
+
+  // ── draw background ──────────────────────────────────────
+  ctx.fillStyle = '#0d0d0f';
+  ctx.fillRect(0, 0, w, h);
+
+  // ── animate lines drawing ────────────────────────────────
+  const density    = parseFloat(densitySlider.value);
+  const totalLines = Math.floor(edgePts.length * density * 0.18);
+  const pts        = edgePts.slice(0, Math.min(totalLines, edgePts.length));
+
+  const BATCH = 180; // lines per frame
+  let drawn   = 0;
+
+  const rgb = hexToRgb(lineColor);
+
+  function drawBatch() {
+    const end = Math.min(drawn + BATCH, pts.length);
+    for (let i = drawn; i < end; i++) {
+      const pt  = pts[i];
+      const s   = pt.strength;
+      const len = 2 + s * 5;
+      const angle = Math.random() * Math.PI * 2;
+
+      const x1 = pt.x + Math.cos(angle) * len * 0.5;
+      const y1 = pt.y + Math.sin(angle) * len * 0.5;
+      const x2 = pt.x - Math.cos(angle) * len * 0.5;
+      const y2 = pt.y - Math.sin(angle) * len * 0.5;
+
+      const alpha = 0.12 + s * 0.55;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`;
+      ctx.lineWidth   = 0.5 + s * 0.8;
+      ctx.stroke();
+    }
+    drawn = end;
+
+    const pct = Math.round(drawn / pts.length * 100);
+    statusEl.textContent = drawn < pts.length ? `rendering... ${pct}%` : `selesai ✓  (${pts.length.toLocaleString()} garis)`;
+
+    if (drawn < pts.length) animFrame = requestAnimationFrame(drawBatch);
+  }
+
+  animFrame = requestAnimationFrame(drawBatch);
+}
+
+function hexToRgb(hex) {
+  return {
+    r: parseInt(hex.slice(1,3),16),
+    g: parseInt(hex.slice(3,5),16),
+    b: parseInt(hex.slice(5,7),16),
+  };
+}
+</script>
+</body>
+</html>

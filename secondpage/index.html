@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Games!</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- BG FLOATERS -->
+<div class="bg-deco" style="left:5%;  animation-duration:12s; animation-delay:0s;">🎈</div>
+<div class="bg-deco" style="left:20%; animation-duration:9s;  animation-delay:2s; font-size:36px;">⭐</div>
+<div class="bg-deco" style="left:40%; animation-duration:15s; animation-delay:5s; font-size:58px;">🎉</div>
+<div class="bg-deco" style="left:65%; animation-duration:11s; animation-delay:1s;">🎁</div>
+<div class="bg-deco" style="left:82%; animation-duration:13s; animation-delay:3s;">🎂</div>
+
+<!-- MUSIC BUTTON — always on top -->
+<button id="musicBtn" title="Toggle Music">🎵</button>
+
+<!-- BG AUDIO -->
+<!-- Ganti src dengan "audio/music.mp3" kalau punya file lokal -->
+<audio id="bgMusic"
+    src="../assets/audio/bcksound-minigame.mp3"
+    loop></audio>
+
+<!-- ========================
+     PAGE 1: CATCHING GAME
+========================= -->
+<div class="page active" id="page1">
+    <h1 class="title">Birthday Tap Blast!</h1>
+    <p class="subtitle">Tangkap 24 item dalam 30 detik!</p>
+
+    <div class="top-bar">
+        <div class="stat-pill">🎯 <span id="scoreDisplay">0</span><span style="opacity:.7">/24</span></div>
+        <div class="stat-pill" id="timerPill">⏱ <span class="val" id="timerDisplay">30</span>s</div>
+    </div>
+
+    <div id="gameContainer"></div>
+
+    <div class="progress-wrap"><div id="progressBar"></div></div>
+    <div id="p1message"></div>
+
+    <div class="btn-row">
+        <button class="action-btn btn-pink" id="retryBtn" style="display:none">Try Again</button>
+        <button class="action-btn btn-yellow" id="toTTTBtn" style="display:none">Lanjut ke Game 2 ➜</button>
+    </div>
+</div>
+
+<!-- ========================
+     PAGE 2: TIC-TAC-TOE
+========================= -->
+<div class="page" id="page2">
+    <h1 class="title">Birthday Tic-Tac-Toe!</h1>
+    <p class="subtitle">Zezell vs Bahlil<br> siapakah yang menang?</p>
+
+    <div class="scoreboard">
+        <div class="score-card active" id="cardX">
+            <div class="player-icon">🦓</div>
+            <div class="player-label">Zezell</div>
+            <div class="player-score" id="scoreX">0</div>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="score-card" id="cardO">
+            <div class="player-icon">👹</div>
+            <div class="player-label">Bahlil</div>
+            <div class="player-score" id="scoreO">0</div>
+        </div>
+    </div>
+
+    <div id="turnIndicator">🦓 Giliran Kamu!</div>
+
+    <div id="tttBoard">
+        <div class="cell" data-i="0"></div>
+        <div class="cell" data-i="1"></div>
+        <div class="cell" data-i="2"></div>
+        <div class="cell" data-i="3"></div>
+        <div class="cell" data-i="4"></div>
+        <div class="cell" data-i="5"></div>
+        <div class="cell" data-i="6"></div>
+        <div class="cell" data-i="7"></div>
+        <div class="cell" data-i="8"></div>
+    </div>
+
+    <div id="p2message"></div>
+
+    <div class="btn-row">
+        <button class="action-btn btn-pink" id="tttRestartBtn">Main Lagi</button>
+        <button class="action-btn btn-yellow" id="nextPageBtn" style="display:none">Continue ➜</button>
+    </div>
+</div>
+
+<!-- ========================
+     PAGE 3: KERTAS GUNTING BATU
+========================= -->
+<div class="page" id="page3">
+    <h1 class="title">🤜 Lawan Bahlil!  🤛</h1>
+    <p class="subtitle">Menangkan 3 ronde untuk mengalahkan Bahlil</p>
+
+    <div class="scoreboard">
+        <div class="score-card active" id="rpsCardPlayer">
+            <div class="player-icon">🦓</div>
+            <div class="player-label">Zezell</div>
+            <div class="player-score" id="rpsScorePlayer">0</div>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="score-card" id="rpsCardBahlil">
+            <div class="player-icon">👹</div>
+            <div class="player-label">Bahlil</div>
+            <div class="player-score" id="rpsScoreBahlil">0</div>
+        </div>
+    </div>
+
+    <div id="rpsArena">
+        <div id="rpsPlayerHand" class="rps-hand">🦓</div>
+        <div id="rpsVs">VS</div>
+        <div id="rpsBahlilHand" class="rps-hand">👹</div>
+    </div>
+
+    <div id="rpsResult"></div>
+
+    <div class="rps-choices">
+        <button class="rps-btn" data-choice="rock"     title="Batu">✊</button>
+        <button class="rps-btn" data-choice="paper"    title="Kertas">✋</button>
+        <button class="rps-btn" data-choice="scissors" title="Gunting">✌️</button>
+    </div>
+
+    <div id="rpsLabel" class="rps-choice-label">✊ Batu &nbsp;|&nbsp; ✋ Kertas &nbsp;|&nbsp; ✌️ Gunting</div>
+
+    <div class="btn-row">
+        <button class="action-btn btn-pink" id="rpsRestartBtn" style="display:none">Try Again!</button>
+        <button class="action-btn btn-yellow" id="rpsNextBtn" style="display:none">Claim Box ➜</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

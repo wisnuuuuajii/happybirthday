@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kado untuk Nabila</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button id="musicBtn" title="Toggle Music">🎵</button>
+<audio id="bgMusic" src="../assets/audio/hbd.mp3" loop></audio>
+
+<div class="bg-layer"></div>
+<div class="bg-deco" style="left:5%;  animation-duration:13s;">🎈</div>
+<div class="bg-deco" style="left:25%; animation-duration:10s; animation-delay:2s; font-size:34px;">⭐</div>
+<div class="bg-deco" style="left:55%; animation-duration:15s; animation-delay:5s; font-size:52px;">🎉</div>
+<div class="bg-deco" style="left:78%; animation-duration:12s; animation-delay:1s;">🎁</div>
+<div class="bg-deco" style="left:91%; animation-duration:9s;  animation-delay:3s; font-size:38px;">🎂</div>
+
+<!-- VICTORY SCREEN -->
+<div id="victoryScreen">
+  <div class="victory-inner">
+    <div class="victory-emoji">🏆</div>
+    <h1 class="victory-title">GOOD JOB</h1>
+    <p class="victory-sub">Kamu berhasil ngalahin semua mini game!</p>
+<div class="victory-badges">
+  <div class="v-badge badge-1">
+    <div class="v-badge-icon"></div>
+    <div class="v-badge-info">
+      <div class="v-badge-name">Birthday Tap Blast</div>
+      <div class="v-badge-status">Selesai dalam tepat waktu!</div>
+    </div>
+    <div class="v-badge-check">✓</div>
+  </div>
+  <div class="v-badge badge-2">
+    <div class="v-badge-icon"></div>
+    <div class="v-badge-info">
+      <div class="v-badge-name">Birthday Tic-Tac-Toe</div>
+      <div class="v-badge-status">Bahlil berhasil dikalahkan!</div>
+    </div>
+    <div class="v-badge-check">✓</div>
+  </div>
+  <div class="v-badge badge-3">
+    <div class="v-badge-icon"></div>
+    <div class="v-badge-info">
+      <div class="v-badge-name">Kertas Gunting Batu</div>
+      <div class="v-badge-status">3 ronde kamu menang!</div>
+    </div>
+    <div class="v-badge-check">✓</div>
+  </div>
+</div>
+    <button class="btn-claim" id="claimBtn">Terima Hadiah</button>
+  </div>
+</div>
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="loading-inner">
+    <div class="loading-box-wrap">
+      <div class="loading-box" id="loadingBox">🎁</div>
+      <div class="loading-rays" id="loadingRays"></div>
+    </div>
+    <p class="loading-title">Kado lagi disiapkan...</p>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p class="loading-sub" id="loadingSub">Membuka bungkus kado... 🎀</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="wrapper">
+  <p class="eyebrow">hadiah spesial untuk</p>
+  <h1 class="page-title">Nabila Aulia Rahma</h1>
+  <p class="page-sub">Kamu udah berjuang keras di mini game,<br>Sekarang saatnya buka kado kamu Zezell!</p>
+
+  <div class="gift-row">
+
+    <!-- KADO 1 -->
+    <div class="gift-box" id="gift1" data-gift="1">
+      <div class="gift-lid"><div class="lid-ribbon"></div></div>
+      <div class="gift-body">
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+      </div>
+      <div class="gift-glow"></div>
+      <div class="gift-label">Kado 1</div>
+    </div>
+
+    <!-- KADO 2 — locked -->
+    <div class="gift-box locked" id="gift2" data-gift="2">
+      <div class="gift-lid"><div class="lid-ribbon"></div></div>
+      <div class="gift-body">
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+      </div>
+      <div class="lock-icon">🔒</div>
+      <div class="gift-label">Kado 2</div>
+    </div>
+
+    <!-- KADO 3 — locked -->
+    <div class="gift-box locked" id="gift3" data-gift="3">
+      <div class="gift-lid"><div class="lid-ribbon"></div></div>
+      <div class="gift-body">
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+      </div>
+      <div class="lock-icon">🔒</div>
+      <div class="gift-label">Kado 3</div>
+      <div class="info-btn" id="infoBtn" title="Informasi">👁️‍🗨️</div>
+    </div>
+
+  </div>
+
+  <p class="hint-text" id="hintText">Klik kado pertama untuk mulai!</p>
+</div>
+
+<!-- GIFT MODAL -->
+<div id="modalOverlay">
+  <div class="modal-card" id="modalCard">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- INFO MODAL -->
+<div id="infoModal">
+  <div class="info-card">
+    <button class="info-close" id="infoClose">✕</button>
+    <div class="info-icon-big">👁️‍🗨️</div>
+    <div class="info-title">Informasi</div>
+    <div class="info-text">
+     <strong>Mohon maaf</strong> — apabila ada kesalahan penyebutan Nama, prodi, atau kampus di dalam kado ini.<br><br>
+      Semua yang tertulis di sini dibuat dengan <strong>niat yang tulus</strong> dan penuh doa buat kamu.
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

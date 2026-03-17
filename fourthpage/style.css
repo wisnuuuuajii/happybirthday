@@ -1,0 +1,248 @@
+:root {
+  --navy:   #05090f;
+  --deep:   #080d1a;
+  --mid:    #0d1530;
+  --star:   #e8f0ff;
+  --gold:   #f0d080;
+  --silver: #c8d8f0;
+  --pink:   #ffb3d1;
+  --soft:   rgba(232,240,255,0.75);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background: var(--navy);
+  color: var(--star);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ===== STAR CANVAS ===== */
+#starCanvas {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+/* ===== MOON ===== */
+.moon {
+  position: fixed;
+  top: clamp(30px, 8vw, 70px);
+  right: clamp(30px, 8vw, 90px);
+  width: clamp(60px, 12vw, 100px);
+  height: clamp(60px, 12vw, 100px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff9e0, #f0d878 40%, #c8a830 80%, #8a6800);
+  box-shadow:
+    0 0 40px rgba(240,210,100,0.35),
+    0 0 90px rgba(240,210,100,0.15),
+    inset -8px -6px 0 rgba(140,100,0,0.25);
+  z-index: 1; pointer-events: none;
+  animation: moonGlow 5s ease-in-out infinite alternate;
+}
+@keyframes moonGlow {
+  from { box-shadow: 0 0 40px rgba(240,210,100,0.35), 0 0 90px rgba(240,210,100,0.15), inset -8px -6px 0 rgba(140,100,0,0.25); }
+  to   { box-shadow: 0 0 60px rgba(240,210,100,0.55), 0 0 130px rgba(240,210,100,0.25), inset -8px -6px 0 rgba(140,100,0,0.25); }
+}
+
+/* ===== METEOR ===== */
+.meteor {
+  position: fixed; z-index: 1; pointer-events: none;
+  width: 2px; height: 80px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9), transparent);
+  border-radius: 2px;
+  opacity: 0;
+}
+#meteor1 { top: 10%; left: 20%; transform: rotate(25deg); animation: meteorFall 8s ease-in 2s infinite; }
+#meteor2 { top: 5%;  left: 60%; transform: rotate(25deg); animation: meteorFall 8s ease-in 5s infinite; }
+@keyframes meteorFall {
+  0%   { opacity: 0; transform: rotate(25deg) translateY(-20px); }
+  5%   { opacity: 1; }
+  20%  { opacity: 0; transform: rotate(25deg) translateY(120px); }
+  100% { opacity: 0; transform: rotate(25deg) translateY(120px); }
+}
+
+/* ===== MUSIC BTN ===== */
+#musicBtn {
+  position: fixed; top: 16px; right: 18px; z-index: 200;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1.5px solid rgba(232,240,255,0.2);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  cursor: pointer; font-size: 19px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+#musicBtn:hover { transform: scale(1.12); background: rgba(255,255,255,0.12); }
+#musicBtn.playing { animation: musicPulse 2s ease-in-out infinite; }
+@keyframes musicPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(240,208,120,0.4); }
+  50%     { box-shadow: 0 0 0 10px rgba(240,208,120,0); }
+}
+
+/* ===== INTRO OVERLAY ===== */
+#introOverlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: #05090f;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.8s ease;
+}
+#introOverlay.fade-out {
+  opacity: 0; pointer-events: none;
+}
+
+.intro-content {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 20px;
+  text-align: center;
+}
+
+.intro-moon {
+  font-size: 64px;
+  animation: introMoonIn 1s cubic-bezier(.36,2,.6,1) 0.3s both;
+  filter: drop-shadow(0 0 30px rgba(240,210,100,0.6));
+}
+@keyframes introMoonIn {
+  from { transform: scale(0) rotate(-20deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.intro-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(16px, 3.5vw, 22px);
+  font-style: italic;
+  color: rgba(232,240,255,0.7);
+  letter-spacing: 0.06em;
+  min-height: 28px;
+}
+
+/* ===== MAIN WRAP ===== */
+#mainWrap {
+  position: relative; z-index: 2;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 24px 80px;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+#mainWrap.visible { opacity: 1; }
+
+/* ===== POEM CONTAINER ===== */
+.poem-container {
+  max-width: 560px; width: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 28px;
+  text-align: center;
+}
+
+.poem-eyebrow {
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(232,240,255,0.28);
+}
+
+/* ===== POEM LINES ===== */
+.poem-lines {
+  display: flex; flex-direction: column;
+  gap: 6px; width: 100%;
+}
+
+.poem-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 4.5vw, 28px);
+  font-weight: 300;
+  color: rgba(232,240,255,0.88);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.poem-line.visible {
+  opacity: 1; transform: translateY(0);
+}
+.poem-line.italic { font-style: italic; }
+.poem-line.bold {
+  font-weight: 400;
+  color: var(--gold);
+  font-size: clamp(20px, 5vw, 32px);
+  text-shadow: 0 0 20px rgba(240,208,120,0.4);
+}
+.poem-line.spacer { height: 14px; }
+.poem-line.pink {
+  color: var(--pink);
+  text-shadow: 0 0 16px rgba(255,180,210,0.35);
+}
+
+/* ===== DIVIDER ===== */
+.poem-divider {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, transparent, rgba(232,240,255,0.25), transparent);
+  opacity: 0; transition: opacity 1s ease;
+}
+.poem-divider.visible { opacity: 1; }
+
+/* ===== SIGN ===== */
+.poem-sign {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: clamp(14px, 3vw, 18px);
+  color: rgba(232,240,255,0.38);
+  letter-spacing: 0.06em;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  min-height: 24px;
+}
+.poem-sign.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== FOOTER BUTTON ===== */
+.poem-footer {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  min-height: 50px;
+}
+.poem-footer.visible { opacity: 1; transform: translateY(0); }
+
+.btn-end {
+  padding: 12px 36px;
+  background: transparent;
+  border: 1.5px solid rgba(232,240,255,0.22);
+  border-radius: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 800;
+  color: rgba(232,240,255,0.55);
+  cursor: pointer; letter-spacing: 0.1em; text-transform: uppercase;
+  transition: border-color 0.3s, color 0.3s, background 0.3s, transform 0.2s;
+}
+.btn-end:hover {
+  border-color: rgba(240,208,120,0.5);
+  color: var(--gold);
+  background: rgba(240,208,120,0.05);
+  transform: translateY(-2px);
+}
+
+/* ===== SHOOTING STAR particles ===== */
+.sstar {
+  position: fixed; pointer-events: none; z-index: 1;
+  width: 1.5px; height: 1.5px; border-radius: 50%;
+  background: white;
+  animation: sstarFade ease-in-out forwards;
+}
+@keyframes sstarFade {
+  0%   { opacity: 0; transform: scale(0); }
+  50%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0); }
+}
+
+/* ===== SHARED ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

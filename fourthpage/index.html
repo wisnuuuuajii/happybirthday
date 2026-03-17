@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌙</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Music -->
+<button id="musicBtn" title="Toggle Music">🎵</button>
+<audio id="bgMusic" src="../assets/audio/TerbuangDalamWaktu.mp3" loop></audio>
+
+<!-- Canvas untuk bintang -->
+<canvas id="starCanvas"></canvas>
+
+<!-- Bulan -->
+<div class="moon"></div>
+
+<!-- Meteor sesekali -->
+<div class="meteor" id="meteor1"></div>
+<div class="meteor" id="meteor2"></div>
+
+<!-- INTRO OVERLAY — animasi masuk -->
+<div id="introOverlay">
+  <div class="intro-content">
+    <div class="intro-moon">🌙</div>
+    <p class="intro-text" id="introText"></p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainWrap">
+
+  <div class="poem-container" id="poemContainer">
+
+    <div class="poem-eyebrow"> Selamat bertambah umur, Zezell </div>
+
+    <div class="poem-lines" id="poemLines">
+      <!-- diisi JS satu per satu -->
+    </div>
+
+    <div class="poem-sign" id="poemSign">
+      <!-- muncul terakhir -->
+    </div>
+
+    <div class="poem-footer" id="poemFooter">
+      <!-- tombol akhir -->
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
