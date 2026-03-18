@@ -309,7 +309,7 @@ tidak terasa, sudah lebih dari dua tahun sejak <strong>7 Januari 2024.</strong> 
 
 <em>Semoga tahun ini membawa banyak kesempatan baru, cerita baru, dan hal-hal baik yang pantas kamu dapatkan. Jaga diri baik-baik ya.</em>
     </div>
-    <div class="letter-sign">— Wisnu, someone you once knew since January 2024.</div>
+    <div class="letter-sign">— Wisnu aji nugroho</div>
   `;
 
   // ── KADO 2 — TWIBON BIRTHDAY ────────────────────────────
