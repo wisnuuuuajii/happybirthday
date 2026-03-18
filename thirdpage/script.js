@@ -317,7 +317,7 @@ tidak terasa, sudah lebih dari dua tahun sejak <strong>7 Januari 2024.</strong> 
     <div class="twibon-header">
       <div class="twibon-badge-label">Birthday Twibon</div>
       <div class="twibon-title">Selebrasikan Ultahmu!</div>
-      <div class="twibon-sub">Upload foto, terus download hasilnya</div>
+      <div class="twibon-sub">Upload foto, lalu download hasilnya!</div>
     </div>
 
     <div class="twibon-canvas-wrap">
@@ -341,7 +341,7 @@ tidak terasa, sudah lebih dari dua tahun sejak <strong>7 Januari 2024.</strong> 
       </button>
     </div>
 
-    <div class="twibon-hint">Foto akan otomatis masuk ke frame birthday</div>
+    <div class="twibon-hint">Foto akan otomatis msuk ke frame birthday</div>
   `;
 
   // ── KADO 3 — DOA SNBP ───────────────────────────────────
@@ -361,7 +361,7 @@ Tentang langkah yang akan membawa kamu menuju masa depan yang sedang kamu impika
 SNBP adalah hasil dari semua usaha yang sudah kamu lakukan selama ini.
 Dan jika hasilnya belum seperti yang diharapkan, bukan berarti jalanmu berhenti di sana.
 
-Masih ada kesempatan lain yang bisa kamu tempuh melalui SNBT.
+Masih ada keswmpatan lain yang bisa kamu tempuh melalui SNBT.
 Mungkin jalannya akan terasa lebih panjang, tapi setiap usaha yang kamu lakukan pasti memiliki arti.
 
 Aku hanya ingin mendoakan yang terbaik untukmu.
