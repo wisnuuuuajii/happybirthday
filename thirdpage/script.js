@@ -355,18 +355,24 @@ tidak terasa, sudah lebih dari dua tahun sejak <strong>7 Januari 2024.</strong> 
     <div class="snbp-name">Nabila Aulia Rahma</div>
     <div class="snbp-divider"></div>
     <div class="snbp-msg">
-Akhir-akhir ini mungkin ada satu kabar yang sedang kamu tunggu, Sebuah pengumuman yang terasa penting, yang diam-diam membuat hari terasa sedikit berbeda.
+Akhir-akhir ini mungkin ada satu kabar yang sedang kamu tunggu dengan penuh harap.
+Tentang langkah yang akan membawa kamu menuju masa depan yang sedang kamu impikan
 
-SNBP memang tentang menunggu, Menunggu hasil dari usaha yang sudah kamu lakukan selama ini
+SNBP adalah hasil dari semua usaha yang sudah kamu lakukan selama ini.
+Dan jika hasilnya belum seperti yang diharapkan, bukan berarti jalanmu berhenti di sana.
 
-Namun di sisi lain, masih ada langkah berikutnya yang harus dipersiapkan. SNBT bukan hanya tentang hasil, tapi tentang proses yang harus kamu jalani dengan usaha dan keberanian.
+Masih ada kesempatan lain yang bisa kamu tempuh melalui SNBT.
+Mungkin jalannya akan terasa lebih panjang, tapi setiap usaha yang kamu lakukan pasti memiliki arti.
 
-Tidak semua jalan datang dengan cara yang sama. Kadang kita diberi kemudahan, kadang kita diminta untuk berjuang sedikit lebih keras.
+Aku hanya ingin mendoakan yang terbaik untukmu.
+Semoga setiap langkahmu dimudahkan,
+semoga setiap proses yang kamu jalani diberi kekuatan dan ketenangan
 
-<strong>Aku percaya kamu bisa sampai ke sana.</strong>
+<strong>Aku yakin semua yang kamu perjuangkan saat ini tidak akan sia-sia.</strong>
 
-Apapun hasil yang nanti kamu terima, itu bukan akhir dari perjalananmu. Karena setiap usaha akan selalu menemukan jalannya sendiri.
-Dan semoga, salah satu tujuan indah yang akan kamu capai nanti adalah
+Semoga apa yang sedang kamu perjuangkan saat ini benar-benar menemukan jalannya.
+Dan semoga, di antara banyak kemungkinan yang ada,
+salah satunya membawamu menuju
 <em>UNIVERSITAS PEMBANGUNAN NASIONAL
 "VETERAN" YOGYAKARTA</em>
     </div>
