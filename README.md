@@ -25,15 +25,15 @@ This project is designed to deliver a fun and engaging digital greeting experien
 
 ### 🏠 Landing Page
 
-![Landing](./landing.png)
+![Landing](./assets/img/landing.png)
 
 ### 🎮 Mini Game Interaction
 
-![Game](./gameplay.png)
+![Game](./assets/img/gameplay.png)
 
 ### 🎉 Final Result
 
-![Result](./result.png)
+![Result](./assets/img/result.png)
 
 ## 🚀 How to Run
 
