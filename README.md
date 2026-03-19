@@ -25,7 +25,7 @@ This project is designed to deliver a fun and engaging digital greeting experien
 
 ### 🏠 Landing Page
 
-![Landing](./assets/landing.png)
+![Landing](./assets/img/landing.png)
 
 ### 🎮 Mini Game Interaction
 
