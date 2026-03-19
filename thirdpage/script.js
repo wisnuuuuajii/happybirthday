@@ -22,7 +22,7 @@ musicBtn.addEventListener('click', () => {
 });
 
 // ============================================================
-// STARS
+// STARS BACKGROUND
 // ============================================================
 for (let i = 0; i < 60; i++) {
   const s = document.createElement('div');
@@ -206,6 +206,7 @@ function openModal(giftNum) {
 
   if (giftNum === 2) {
     setTimeout(() => initTwibon(), 100);
+    setTimeout(() => initTwibonEffects(), 300);
   }
 
   if (giftNum === 3) {
@@ -268,7 +269,7 @@ document.querySelectorAll('.gift-box').forEach(box => {
     hintText.textContent = hints[openedCount] || '';
     openModal(num);
   });
-}); 
+});
 
 // ============================================================
 // INFO BUTTON
@@ -317,7 +318,7 @@ tidak terasa, sudah lebih dari dua tahun sejak <strong>7 Januari 2024.</strong> 
     <div class="twibon-header">
       <div class="twibon-badge-label">Birthday Twibon</div>
       <div class="twibon-title">Selebrasikan Ultahmu!</div>
-      <div class="twibon-sub">Upload foto, lalu download hasilnya!</div>
+      <div class="twibon-sub">Upload foto, sesuaikan, lalu download!</div>
     </div>
 
     <div class="twibon-canvas-wrap">
@@ -328,20 +329,25 @@ tidak terasa, sudah lebih dari dua tahun sejak <strong>7 Januari 2024.</strong> 
       </div>
     </div>
 
+    <div class="twibon-zoom-wrap" id="twibonZoomWrap">
+      <button class="btn-zoom" id="zoomOut">−</button>
+      <span class="zoom-label" id="zoomLabel">100%</span>
+      <button class="btn-zoom" id="zoomIn">+</button>
+    </div>
+
     <div class="twibon-controls">
       <label class="btn-twibon-upload" for="twibonInput">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Upload Foto
       </label>
       <input type="file" id="twibonInput" accept="image/*" style="display:none">
-
       <button class="btn-twibon-download" id="twibonDownload" disabled>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download
       </button>
     </div>
 
-    <div class="twibon-hint">Foto akan otomatis masuk ke frame birthday</div>
+    <div class="twibon-hint">Drag geser · Slider zoom · Download 🎉</div>
   `;
 
   // ── KADO 3 — DOA SNBP ───────────────────────────────────
@@ -383,9 +389,7 @@ salah satunya membawamu menuju
       <div class="moon-sparkle" style="animation-duration:2.3s;animation-delay:1.2s;">⋆</div>
       <div class="moon-sparkle" style="animation-duration:1.9s;animation-delay:0.3s;">✦</div>
       <div class="moon-sparkle" style="animation-duration:2.6s;animation-delay:0.9s;">⋆</div>
-      <button class="btn-moon" id="btnMoon" onclick="triggerMoonSpin()">
-        🌙
-      </button>
+      <button class="btn-moon" id="btnMoon" onclick="triggerMoonSpin()">🌙</button>
       <div class="btn-moon-label">Tap the moon</div>
       <div class="btn-moon-sub">✦ Let the moon guide you ✦</div>
     </div>
@@ -393,7 +397,7 @@ salah satunya membawamu menuju
 }
 
 // ============================================================
-// MOON SPIN — klik bulan → spin 360° → pindah halaman
+// MOON SPIN
 // ============================================================
 function triggerMoonSpin() {
   const btn = document.getElementById('btnMoon');
@@ -405,6 +409,126 @@ function triggerMoonSpin() {
   }, 700);
 }
 
+// ============================================================
+// TWIBON EFFECTS — bintang berkedip + partikel berputar
+// ============================================================
+function initTwibonEffects() {
+  const wrap = document.querySelector('.twibon-canvas-wrap');
+  if (!wrap || wrap.dataset.effectsInit) return;
+  wrap.dataset.effectsInit = 'true';
+
+  const H = wrap.offsetHeight || 320;
+
+  // ── Bintang ✦ berkedip di sekeliling frame ──
+  const starPos = [
+    [-8,  10, 12, '0s',   '2.1s', '#ffe066'],
+    [-8,  45, 9,  '0.8s', '1.8s', '#ff6eb4'],
+    [-8,  80, 11, '1.5s', '2.4s', '#c77dff'],
+    [103, 15, 10, '0.4s', '1.9s', '#72efdd'],
+    [103, 55, 13, '1.1s', '2.2s', '#ffe066'],
+    [103, 85, 9,  '1.8s', '1.7s', '#ff6eb4'],
+    [15,  -8, 11, '0.6s', '2.0s', '#4a9eff'],
+    [50,  -8, 9,  '1.3s', '1.8s', '#c77dff'],
+    [85,  -8, 12, '0.2s', '2.3s', '#ffe066'],
+    [15,  105,10, '0.9s', '2.1s', '#72efdd'],
+    [50,  105,13, '1.6s', '1.9s', '#ff6eb4'],
+    [85,  105, 9, '0.5s', '2.0s', '#4a9eff'],
+  ];
+
+  starPos.forEach(([x, y, size, delay, dur, color]) => {
+    const star = document.createElement('div');
+    star.style.cssText = `
+      position:absolute; pointer-events:none; z-index:10;
+      left:${x}%; top:${y}%;
+      font-size:${size}px; color:${color};
+      text-shadow:0 0 6px ${color},0 0 14px ${color}80;
+      opacity:0;
+      animation:twibonStarBlink ${dur} ease-in-out ${delay} infinite;
+    `;
+    star.textContent = '✦';
+    wrap.appendChild(star);
+  });
+
+  // ── Ring partikel berputar searah ──
+  const ring1 = document.createElement('div');
+  ring1.style.cssText = `
+    position:absolute; inset:-18px; border-radius:22px;
+    pointer-events:none; z-index:9;
+    animation:twibonRingSpin 8s linear infinite;
+  `;
+  wrap.appendChild(ring1);
+
+  const dotColors = ['#ff6eb4','#ffe066','#c77dff','#72efdd','#4a9eff','#ffffff'];
+  for (let i = 0; i < 12; i++) {
+    const angle = (i / 12) * 360;
+    const color = dotColors[i % dotColors.length];
+    const size  = 3 + (i % 3);
+    const dot   = document.createElement('div');
+    dot.style.cssText = `
+      position:absolute; border-radius:50%;
+      width:${size}px; height:${size}px;
+      background:${color};
+      box-shadow:0 0 6px ${color},0 0 10px ${color}80;
+      top:50%; left:50%;
+      transform:rotate(${angle}deg) translateY(-${(H/2)+18}px) translateX(-${size/2}px);
+      transform-origin:0 0;
+      animation:twibonDotPulse ${1.2+(i%4)*0.3}s ease-in-out ${(i*0.12).toFixed(2)}s infinite alternate;
+    `;
+    ring1.appendChild(dot);
+  }
+
+  // ── Ring partikel berputar berlawanan ──
+  const ring2 = document.createElement('div');
+  ring2.style.cssText = `
+    position:absolute; inset:-28px; border-radius:26px;
+    pointer-events:none; z-index:8;
+    animation:twibonRingSpin 12s linear infinite reverse;
+  `;
+  wrap.appendChild(ring2);
+
+  for (let i = 0; i < 8; i++) {
+    const angle = (i / 8) * 360 + 22.5;
+    const color = dotColors[(i+2) % dotColors.length];
+    const size  = 2 + (i % 2);
+    const dot   = document.createElement('div');
+    dot.style.cssText = `
+      position:absolute; border-radius:50%;
+      width:${size}px; height:${size}px;
+      background:${color};
+      box-shadow:0 0 5px ${color};
+      top:50%; left:50%;
+      transform:rotate(${angle}deg) translateY(-${(H/2)+28}px) translateX(-${size/2}px);
+      transform-origin:0 0;
+      animation:twibonDotPulse ${1.4+(i%3)*0.25}s ease-in-out ${(i*0.18).toFixed(2)}s infinite alternate;
+    `;
+    ring2.appendChild(dot);
+  }
+
+  // ── Inject keyframes kalau belum ada ──
+  if (!document.getElementById('twibonEffectKF')) {
+    const kf = document.createElement('style');
+    kf.id = 'twibonEffectKF';
+    kf.textContent = `
+      @keyframes twibonStarBlink {
+        0%,100% { opacity:0; transform:scale(0.5); }
+        50%     { opacity:1; transform:scale(1.3); }
+      }
+      @keyframes twibonRingSpin {
+        from { transform:rotate(0deg); }
+        to   { transform:rotate(360deg); }
+      }
+      @keyframes twibonDotPulse {
+        from { opacity:0.3; transform-origin:0 0; filter:brightness(0.8); }
+        to   { opacity:1;   transform-origin:0 0; filter:brightness(1.5); }
+      }
+    `;
+    document.head.appendChild(kf);
+  }
+}
+
+// ============================================================
+// TWIBON — logic canvas
+// ============================================================
 function initTwibon() {
   const canvas      = document.getElementById('twibonCanvas');
   if (!canvas) return;
@@ -412,418 +536,113 @@ function initTwibon() {
   const input       = document.getElementById('twibonInput');
   const downloadBtn = document.getElementById('twibonDownload');
   const placeholder = document.getElementById('twibonPlaceholder');
+  const zoomSlider  = null; // tidak dipakai
+  const zoomInBtn   = document.getElementById('zoomIn');
+  const zoomOutBtn  = document.getElementById('zoomOut');
+  const zoomLabel   = document.getElementById('zoomLabel');
+  const ZOOM_STEP   = 0.1;
+  const ZOOM_MIN    = 0.5;
+  const ZOOM_MAX    = 3.0;
+
   const W = 500, H = 500;
 
-  let userImage = null;
-
-  function drawFrame() {
-    ctx.clearRect(0, 0, W, H);
-    if (userImage) {
-      const img  = userImage;
-      const side = Math.min(img.width, img.height);
-      const sx   = (img.width  - side) / 2;
-      const sy   = (img.height - side) / 2;
-      ctx.drawImage(img, sx, sy, side, side, 0, 0, W, H);
-    } else {
-      const bg = ctx.createRadialGradient(W*0.4, H*0.35, 0, W*0.5, H*0.5, W*0.85);
-      bg.addColorStop(0,   '#2a0845');
-      bg.addColorStop(0.5, '#130328');
-      bg.addColorStop(1,   '#070010');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
-      const glow = ctx.createRadialGradient(W/2, 60, 0, W/2, 60, 200);
-      glow.addColorStop(0,   'rgba(199,125,255,0.22)');
-      glow.addColorStop(1,   'rgba(199,125,255,0)');
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, W, H);
-      const glow2 = ctx.createRadialGradient(W/2, H-60, 0, W/2, H-60, 200);
-      glow2.addColorStop(0,  'rgba(255,110,180,0.18)');
-      glow2.addColorStop(1,  'rgba(255,110,180,0)');
-      ctx.fillStyle = glow2;
-      ctx.fillRect(0, 0, W, H);
-    }
-    const overlayTop = ctx.createLinearGradient(0, 0, 0, H * 0.38);
-    overlayTop.addColorStop(0, 'rgba(8,2,20,0.78)');
-    overlayTop.addColorStop(1, 'rgba(8,2,20,0)');
-    ctx.fillStyle = overlayTop;
-    ctx.fillRect(0, 0, W, H);
-    const overlayBot = ctx.createLinearGradient(0, H * 0.62, 0, H);
-    overlayBot.addColorStop(0, 'rgba(8,2,20,0)');
-    overlayBot.addColorStop(1, 'rgba(8,2,20,0.88)');
-    ctx.fillStyle = overlayBot;
-    ctx.fillRect(0, 0, W, H);
-    drawRibbon(ctx, W, H);
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,110,180,0.6)';
-    ctx.lineWidth   = 5;
-    ctx.shadowColor = '#ff6eb4';
-    ctx.shadowBlur  = 20;
-    roundRect(ctx, 10, 10, W - 20, H - 20, 16);
-    ctx.stroke();
-    ctx.restore();
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,224,102,0.28)';
-    ctx.lineWidth   = 1.2;
-    ctx.shadowBlur  = 0;
-    roundRect(ctx, 20, 20, W - 40, H - 40, 10);
-    ctx.stroke();
-    ctx.restore();
-    drawCorner(ctx, 20, 20,  1,  1);
-    drawCorner(ctx, W-20, 20, -1,  1);
-    drawCorner(ctx, 20, H-20,  1, -1);
-    drawCorner(ctx, W-20, H-20,-1, -1);
-    drawBalloons(ctx, W, H);
-    drawStars(ctx, W, H);
-    drawSparkles(ctx, W, H);
-    ctx.save();
-    ctx.textAlign   = 'center';
-    ctx.font        = '700 19px "Nunito", sans-serif';
-    ctx.fillStyle   = '#ffe066';
-    ctx.shadowColor = 'rgba(255,200,50,0.9)';
-    ctx.shadowBlur  = 18;
-    ctx.fillText('✦  Happy 18th Birthday  ✦', W / 2, 48);
-    ctx.restore();
-    if (!userImage) drawBadge18(ctx, W / 2, 130);
-    ctx.save();
-    const nameGrad = ctx.createLinearGradient(W*0.2, 0, W*0.8, 0);
-    nameGrad.addColorStop(0,   '#e6e6e6');
-    nameGrad.addColorStop(0.5, '#ffcce8');
-    nameGrad.addColorStop(1,   '#c77dff');
-    ctx.textAlign   = 'center';
-    ctx.font        = '700 30px "Fredoka One", cursive';
-    ctx.fillStyle   = nameGrad;
-    ctx.shadowColor = 'rgba(255,110,180,0.9)';
-    ctx.shadowBlur  = 22;
-    ctx.fillText('Nabila Aulia Rahma', W / 2, H - 56);
-    ctx.restore();
-    ctx.save();
-    ctx.textAlign   = 'center';
-    ctx.font        = '800 15px "Nunito", sans-serif';
-    ctx.fillStyle   = 'rgba(255,110,180,0.85)';
-    ctx.shadowColor = 'rgba(255,110,180,0.5)';
-    ctx.shadowBlur  = 10;
-    ctx.fillText('🎂  MMXXVI  🎂', W / 2, H - 26);
-    ctx.restore();
-    drawConfettiDots(ctx, W, H);
-  }
-
-  function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-  }
-
-  function drawRibbon(ctx, W, H) {
-    ctx.save();
-    const rb = ctx.createLinearGradient(0, H-80, 0, H-70);
-    rb.addColorStop(0, 'rgba(255,110,180,0.18)');
-    rb.addColorStop(1, 'rgba(255,110,180,0.04)');
-    ctx.fillStyle = rb;
-    ctx.fillRect(0, H - 80, W, 60);
-    ctx.strokeStyle = 'rgba(255,110,180,0.35)';
-    ctx.lineWidth   = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, H - 80);
-    ctx.lineTo(W, H - 80);
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  function drawCorner(ctx, x, y, dx, dy) {
-    const len = 36;
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,224,102,0.85)';
-    ctx.lineWidth   = 2.5;
-    ctx.shadowColor = '#ffe066';
-    ctx.shadowBlur  = 12;
-    ctx.lineCap     = 'round';
-    ctx.beginPath();
-    ctx.moveTo(x + dx * len, y);
-    ctx.lineTo(x, y);
-    ctx.lineTo(x, y + dy * len);
-    ctx.stroke();
-    ctx.restore();
-    ctx.save();
-    ctx.fillStyle   = '#ffe066';
-    ctx.shadowColor = '#ffe066';
-    ctx.shadowBlur  = 14;
-    ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-    const ex = x + dx * len;
-    const ey = y + dy * len;
-    ctx.save();
-    ctx.fillStyle   = 'rgba(255,224,102,0.6)';
-    ctx.shadowColor = '#ffe066';
-    ctx.shadowBlur  = 8;
-    ctx.beginPath();
-    ctx.arc(ex, y,  2.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x, ey, 2.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function drawBadge18(ctx, cx, cy) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(cx, cy, 52, 0, Math.PI * 2);
-    const bg = ctx.createRadialGradient(cx, cy, 10, cx, cy, 52);
-    bg.addColorStop(0,   'rgba(199,125,255,0.35)');
-    bg.addColorStop(0.7, 'rgba(255,110,180,0.2)');
-    bg.addColorStop(1,   'rgba(255,110,180,0.05)');
-    ctx.fillStyle   = bg;
-    ctx.shadowColor = '#c77dff';
-    ctx.shadowBlur  = 30;
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(199,125,255,0.6)';
-    ctx.lineWidth   = 2;
-    ctx.stroke();
-    ctx.restore();
-    ctx.save();
-    ctx.textAlign    = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font         = '700 44px "Fredoka One", cursive';
-    const numGrad    = ctx.createLinearGradient(cx-30, cy-20, cx+30, cy+20);
-    numGrad.addColorStop(0, '#ffffff');
-    numGrad.addColorStop(1, '#c77dff');
-    ctx.fillStyle   = numGrad;
-    ctx.shadowColor = 'rgba(199,125,255,0.9)';
-    ctx.shadowBlur  = 20;
-    ctx.fillText('18', cx, cy);
-    ctx.restore();
-  }
-
-  function drawStars(ctx, W, H) {
-    const stars = [
-      [42, 75, 14, 0.55],  [462, 68, 10, 0.45],
-      [32, 430, 10, 0.4],  [468, 448, 14, 0.5],
-      [75, 240, 8,  0.35], [428, 255, 8, 0.35],
-      [235, 28, 10, 0.5],  [265, 478, 10, 0.45],
-      [130, 155, 7, 0.3],  [372, 148, 7, 0.3],
-      [118, 378, 7, 0.3],  [385, 385, 7, 0.3],
-    ];
-    stars.forEach(([px, py, sz, alpha]) => {
-      ctx.save();
-      ctx.globalAlpha  = alpha;
-      ctx.fillStyle    = '#ffe066';
-      ctx.shadowColor  = '#ffe066';
-      ctx.shadowBlur   = sz * 1.2;
-      ctx.font         = `${sz}px serif`;
-      ctx.textAlign    = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('✦', px, py);
-      ctx.restore();
-    });
-  }
-
-  function drawConfettiDots(ctx, W, H) {
-    const dots = [
-      [60, 15, '#ff6eb4', 4],  [120, 12, '#ffe066', 3],
-      [180, 15, '#c77dff', 4], [250, 10, '#72efdd', 3],
-      [320, 14, '#4a9eff', 4], [390, 11, '#ff6eb4', 3],
-      [450, 15, '#ffe066', 4], [490, 13, '#c77dff', 3],
-      [50, H-14, '#72efdd', 4],  [130, H-11, '#ff6eb4', 3],
-      [210, H-14, '#ffe066', 4], [290, H-11, '#c77dff', 3],
-      [370, H-14, '#4a9eff', 4], [450, H-11, '#ff6eb4', 3],
-      [12, 100, '#ffe066', 3],  [15, 200, '#c77dff', 4],
-      [11, 310, '#ff6eb4', 3],  [14, 410, '#72efdd', 4],
-      [W-12, 110, '#4a9eff', 3], [W-14, 220, '#ff6eb4', 4],
-      [W-11, 330, '#ffe066', 3], [W-14, 420, '#c77dff', 4],
-    ];
-    dots.forEach(([x, y, color, r]) => {
-      ctx.save();
-      ctx.fillStyle   = color;
-      ctx.shadowColor = color;
-      ctx.shadowBlur  = r * 2.5;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    });
-  }
-
-  function drawBalloons(ctx, W, H) {
-    const balloons = [
-      { cx: 62,    cy: 105, rx: 30, ry: 36, color: '#ff6eb4', shine: 'rgba(255,255,255,0.45)', sx: 62,    sy: 185 },
-      { cx: 108,   cy: 75,  rx: 26, ry: 32, color: '#c77dff', shine: 'rgba(255,255,255,0.4)',  sx: 108,   sy: 145 },
-      { cx: 148,   cy: 100, rx: 22, ry: 27, color: '#ffe066', shine: 'rgba(255,255,255,0.45)', sx: 148,   sy: 168 },
-      { cx: W-62,  cy: 105, rx: 30, ry: 36, color: '#4a9eff', shine: 'rgba(255,255,255,0.45)', sx: W-62,  sy: 185 },
-      { cx: W-108, cy: 75,  rx: 26, ry: 32, color: '#72efdd', shine: 'rgba(255,255,255,0.4)',  sx: W-108, sy: 145 },
-      { cx: W-148, cy: 100, rx: 22, ry: 27, color: '#ff6eb4', shine: 'rgba(255,255,255,0.45)', sx: W-148, sy: 168 },
-    ];
-    balloons.forEach(b => {
-      ctx.save();
-      ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-      ctx.lineWidth   = 1.2;
-      ctx.setLineDash([3, 3]);
-      ctx.beginPath();
-      ctx.moveTo(b.cx, b.cy + b.ry);
-      ctx.bezierCurveTo(b.cx+8, b.cy+b.ry+20, b.cx-8, b.cy+b.ry+40, b.sx, b.sy);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-      ctx.save();
-      const grad = ctx.createRadialGradient(b.cx-b.rx*0.3, b.cy-b.ry*0.3, b.ry*0.08, b.cx, b.cy, b.ry*1.1);
-      grad.addColorStop(0,   lightenColor(b.color, 0.5));
-      grad.addColorStop(0.5, b.color);
-      grad.addColorStop(1,   darkenColor(b.color, 0.35));
-      ctx.fillStyle   = grad;
-      ctx.shadowColor = b.color;
-      ctx.shadowBlur  = 14;
-      ctx.beginPath();
-      ctx.ellipse(b.cx, b.cy, b.rx, b.ry, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-      ctx.save();
-      ctx.globalAlpha = 0.55;
-      ctx.fillStyle   = b.shine;
-      ctx.beginPath();
-      ctx.ellipse(b.cx-b.rx*0.28, b.cy-b.ry*0.28, b.rx*0.28, b.ry*0.2, -0.5, 0, Math.PI*2);
-      ctx.fill();
-      ctx.restore();
-      ctx.save();
-      ctx.fillStyle = darkenColor(b.color, 0.3);
-      ctx.beginPath();
-      ctx.ellipse(b.cx, b.cy+b.ry, 4, 5, 0, 0, Math.PI*2);
-      ctx.fill();
-      ctx.restore();
-    });
-  }
-
-  function lightenColor(hex, amt) {
-    const n = parseInt(hex.slice(1), 16);
-    const r = Math.min(255, (n >> 16) + Math.round(amt * 255));
-    const g = Math.min(255, ((n >> 8) & 0xff) + Math.round(amt * 180));
-    const b = Math.min(255, (n & 0xff) + Math.round(amt * 180));
-    return `rgb(${r},${g},${b})`;
-  }
-  function darkenColor(hex, amt) {
-    const n = parseInt(hex.slice(1), 16);
-    const r = Math.max(0, (n >> 16) - Math.round(amt * 255));
-    const g = Math.max(0, ((n >> 8) & 0xff) - Math.round(amt * 255));
-    const b = Math.max(0, (n & 0xff) - Math.round(amt * 255));
-    return `rgb(${r},${g},${b})`;
-  }
-
-  function drawSparkles(ctx, W, H) {
-    const sparkles = [
-      [38,  210, 10, '#ffe066'], [W-38, 180, 8,  '#ff6eb4'],
-      [60,  310, 7,  '#c77dff'], [W-55, 320, 9,  '#72efdd'],
-      [200, 35,  8,  '#ff6eb4'], [310,  38,  7,  '#4a9eff'],
-      [180, H-35, 8, '#ffe066'], [330, H-32, 7,  '#c77dff'],
-      [W-40, 400, 8, '#ffe066'], [42,  400,  7,  '#4a9eff'],
-    ];
-    sparkles.forEach(([x, y, size, color]) => {
-      ctx.save();
-      ctx.fillStyle   = color;
-      ctx.shadowColor = color;
-      ctx.shadowBlur  = size * 2;
-      const s = size;
-      ctx.beginPath();
-      ctx.moveTo(x - s, y);
-      ctx.quadraticCurveTo(x-s*0.18, y-s*0.18, x, y-s);
-      ctx.quadraticCurveTo(x+s*0.18, y-s*0.18, x+s, y);
-      ctx.quadraticCurveTo(x+s*0.18, y+s*0.18, x, y+s);
-      ctx.quadraticCurveTo(x-s*0.18, y+s*0.18, x-s, y);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle  = 'rgba(255,255,255,0.7)';
-      ctx.shadowBlur = 4;
-      ctx.beginPath();
-      ctx.arc(x, y, s * 0.18, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    });
-    const miniDots = [
-      [95, 42, '#ffe066'], [405, 40, '#c77dff'],
-      [32, 155, '#ff6eb4'], [W-32, 260, '#72efdd'],
-      [75, 460, '#4a9eff'], [W-70, 455, '#ff6eb4'],
-    ];
-    miniDots.forEach(([x, y, color]) => {
-      ctx.save();
-      ctx.fillStyle   = color;
-      ctx.shadowColor = color;
-      ctx.shadowBlur  = 6;
-      ctx.globalAlpha = 0.65;
-      ctx.beginPath();
-      ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    });
-  }
-
-  // ── State drag ──
+  let userImage  = null;
+  let frameImage = null;
+  let zoomLevel  = 1;
   let imgOffsetX = 0, imgOffsetY = 0;
   let isDragging = false;
   let dragStartX = 0, dragStartY = 0;
-  let imgDrawX = 0, imgDrawY = 0;
 
-  function drawFrameWithOffset() {
+  // ── Load frame PNG twibon ──
+  const frameImg = new Image();
+  frameImg.onload = () => { frameImage = frameImg; drawFrame(); };
+  frameImg.onerror = () => {
+    console.warn('Frame twibon gagal load, cek path: ../assets/img/twibon-frame.png');
+    drawFrame(); // tetap render background
+  };
+  frameImg.src = '../assets/img/twibon-frame.png';
+
+  // Render background dulu sambil nunggu frame load
+  drawFrame();
+
+  // ── Draw canvas ──
+  function drawFrame() {
     ctx.clearRect(0, 0, W, H);
+
+    // Background gelap
+    const bg = ctx.createRadialGradient(W*0.4, H*0.35, 0, W*0.5, H*0.5, W*0.85);
+    bg.addColorStop(0,   '#2a0845');
+    bg.addColorStop(0.5, '#130328');
+    bg.addColorStop(1,   '#070010');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Foto user di belakang frame
     if (userImage) {
-      const img   = userImage;
-      const scale = Math.max(W / img.width, H / img.height);
-      const dw    = img.width  * scale;
-      const dh    = img.height * scale;
-      const minX  = W - dw, maxX = 0;
-      const minY  = H - dh, maxY = 0;
-      imgDrawX = Math.min(maxX, Math.max(minX, imgOffsetX));
-      imgDrawY = Math.min(maxY, Math.max(minY, imgOffsetY));
-      ctx.drawImage(img, imgDrawX, imgDrawY, dw, dh);
-    } else {
-      const bg = ctx.createRadialGradient(W*0.4, H*0.35, 0, W*0.5, H*0.5, W*0.85);
-      bg.addColorStop(0,   '#2a0845');
-      bg.addColorStop(0.5, '#130328');
-      bg.addColorStop(1,   '#070010');
-      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-      const glow = ctx.createRadialGradient(W/2, 60, 0, W/2, 60, 200);
-      glow.addColorStop(0, 'rgba(199,125,255,0.22)');
-      glow.addColorStop(1, 'rgba(199,125,255,0)');
-      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
-      const glow2 = ctx.createRadialGradient(W/2, H-60, 0, W/2, H-60, 200);
-      glow2.addColorStop(0, 'rgba(255,110,180,0.18)');
-      glow2.addColorStop(1, 'rgba(255,110,180,0)');
-      ctx.fillStyle = glow2; ctx.fillRect(0, 0, W, H);
+      const img      = userImage;
+      const baseScale = Math.max(W / img.width, H / img.height);
+      const scale    = baseScale * zoomLevel;
+      const dw       = img.width  * scale;
+      const dh       = img.height * scale;
+
+      // Clamp offset biar foto ga keluar area lingkaran
+      const minX = W - dw, maxX = 0;
+      const minY = H - dh, maxY = 0;
+      const dx   = Math.min(maxX, Math.max(minX, imgOffsetX));
+      const dy   = Math.min(maxY, Math.max(minY, imgOffsetY));
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(251, 276, 190, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(img, dx, dy, dw, dh);
+      ctx.restore();
     }
-    const overlayTop = ctx.createLinearGradient(0, 0, 0, H * 0.38);
-    overlayTop.addColorStop(0, 'rgba(8,2,20,0.78)');
-    overlayTop.addColorStop(1, 'rgba(8,2,20,0)');
-    ctx.fillStyle = overlayTop; ctx.fillRect(0, 0, W, H);
-    const overlayBot = ctx.createLinearGradient(0, H * 0.62, 0, H);
-    overlayBot.addColorStop(0, 'rgba(8,2,20,0)');
-    overlayBot.addColorStop(1, 'rgba(8,2,20,0.88)');
-    ctx.fillStyle = overlayBot; ctx.fillRect(0, 0, W, H);
-    drawRibbon(ctx, W, H);
-    ctx.save(); ctx.strokeStyle='rgba(255,110,180,0.6)'; ctx.lineWidth=5; ctx.shadowColor='#ff6eb4'; ctx.shadowBlur=20; roundRect(ctx,10,10,W-20,H-20,16); ctx.stroke(); ctx.restore();
-    ctx.save(); ctx.strokeStyle='rgba(255,224,102,0.28)'; ctx.lineWidth=1.2; ctx.shadowBlur=0; roundRect(ctx,20,20,W-40,H-40,10); ctx.stroke(); ctx.restore();
-    drawCorner(ctx,20,20,1,1); drawCorner(ctx,W-20,20,-1,1); drawCorner(ctx,20,H-20,1,-1); drawCorner(ctx,W-20,H-20,-1,-1);
-    drawBalloons(ctx,W,H); drawStars(ctx,W,H); drawSparkles(ctx,W,H);
-    ctx.save(); ctx.textAlign='center'; ctx.font='700 19px "Nunito",sans-serif'; ctx.fillStyle='#ffe066'; ctx.shadowColor='rgba(255,200,50,0.9)'; ctx.shadowBlur=18; ctx.fillText('✦  Happy 18th Birthday  ✦',W/2,48); ctx.restore();
-    if (!userImage) drawBadge18(ctx,W/2,130);
-    ctx.save();
-    const ng = ctx.createLinearGradient(W*0.2,0,W*0.8,0);
-    ng.addColorStop(0,'#ffffff'); ng.addColorStop(0.5,'#ffcce8'); ng.addColorStop(1,'#c77dff');
-    ctx.textAlign='center'; ctx.font='700 30px "Fredoka One",cursive'; ctx.fillStyle=ng; ctx.shadowColor='rgba(255,110,180,0.9)'; ctx.shadowBlur=22; ctx.fillText('Nabila Aulia Rahma',W/2,H-56); ctx.restore();
-    ctx.save(); ctx.textAlign='center'; ctx.font='800 15px "Nunito",sans-serif'; ctx.fillStyle='rgba(255,110,180,0.85)'; ctx.shadowColor='rgba(255,110,180,0.5)'; ctx.shadowBlur=10; ctx.fillText('🎂  MMXXVI  🎂',W/2,H-26); ctx.restore();
-    drawConfettiDots(ctx,W,H);
+
+    // Frame PNG di atas foto
+    if (frameImage) {
+      ctx.drawImage(frameImage, 0, 0, W, H);
+    }
+
+    // Hint teks
     if (userImage) {
-      ctx.save(); ctx.textAlign='center'; ctx.font='600 11px "Nunito",sans-serif'; ctx.fillStyle='rgba(255,255,255,0.30)'; ctx.fillText('✥ drag untuk geser foto',W/2,H-8); ctx.restore();
+      ctx.save();
+      ctx.textAlign  = 'center';
+      ctx.font       = '600 11px "Nunito",sans-serif';
+      ctx.fillStyle  = 'rgba(255,255,255,0.3)';
+      ctx.fillText('✥ drag geser · slider zoom', W/2, H - 8);
+      ctx.restore();
     }
   }
 
-  drawFrame();
+  // ── Tombol zoom + - ──
+  function applyZoom(newZoom) {
+    if (!userImage) return;
+    const prev    = zoomLevel;
+    zoomLevel     = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, newZoom));
 
+    // Pertahankan titik tengah saat zoom berubah
+    const baseScale = Math.max(W / userImage.width, H / userImage.height);
+    const oldDw = userImage.width  * baseScale * prev;
+    const oldDh = userImage.height * baseScale * prev;
+    const newDw = userImage.width  * baseScale * zoomLevel;
+    const newDh = userImage.height * baseScale * zoomLevel;
+
+    imgOffsetX += (oldDw - newDw) / 2;
+    imgOffsetY += (oldDh - newDh) / 2;
+
+    // Clamp
+    imgOffsetX = Math.min(0, Math.max(W - newDw, imgOffsetX));
+    imgOffsetY = Math.min(0, Math.max(H - newDh, imgOffsetY));
+
+    if (zoomLabel) zoomLabel.textContent = Math.round(zoomLevel * 100) + '%';
+    drawFrame();
+  }
+
+  if (zoomInBtn)  zoomInBtn.addEventListener('click',  () => applyZoom(zoomLevel + ZOOM_STEP));
+  if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => applyZoom(zoomLevel - ZOOM_STEP));
+
+  // ── Upload foto ──
   input.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -832,12 +651,16 @@ function initTwibon() {
       const img = new Image();
       img.onload = () => {
         userImage  = img;
+        zoomLevel  = 1;
+        if (zoomLabel) zoomLabel.textContent = '100%';
         const scale = Math.max(W / img.width, H / img.height);
         imgOffsetX  = (W - img.width  * scale) / 2;
         imgOffsetY  = (H - img.height * scale) / 2;
         placeholder.style.display = 'none';
         canvas.style.cursor       = 'grab';
-        drawFrameWithOffset();
+        const zw = document.getElementById('twibonZoomWrap');
+        if (zw) zw.style.opacity = '1';
+        drawFrame();
         downloadBtn.disabled = false;
         downloadBtn.classList.add('ready');
         spawnConfetti(40);
@@ -847,39 +670,67 @@ function initTwibon() {
     reader.readAsDataURL(file);
   });
 
-  function getCanvasPos(e) {
+  // ── Drag mouse ──
+  function getPos(e) {
     const rect = canvas.getBoundingClientRect();
-    return { x: (e.clientX-rect.left)*(W/rect.width), y: (e.clientY-rect.top)*(H/rect.height) };
+    return { x:(e.clientX-rect.left)*(W/rect.width), y:(e.clientY-rect.top)*(H/rect.height) };
   }
   function getTouchPos(e) {
     const rect = canvas.getBoundingClientRect();
-    const t = e.touches[0];
-    return { x: (t.clientX-rect.left)*(W/rect.width), y: (t.clientY-rect.top)*(H/rect.height) };
+    const t    = e.touches[0];
+    return { x:(t.clientX-rect.left)*(W/rect.width), y:(t.clientY-rect.top)*(H/rect.height) };
   }
 
   canvas.addEventListener('mousedown', (e) => {
     if (!userImage) return;
-    isDragging=true; const pos=getCanvasPos(e); dragStartX=pos.x-imgOffsetX; dragStartY=pos.y-imgOffsetY; canvas.style.cursor='grabbing';
+    isDragging = true;
+    const p = getPos(e);
+    dragStartX = p.x - imgOffsetX;
+    dragStartY = p.y - imgOffsetY;
+    canvas.style.cursor = 'grabbing';
   });
   window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    const pos=getCanvasPos(e); imgOffsetX=pos.x-dragStartX; imgOffsetY=pos.y-dragStartY; drawFrameWithOffset();
+    const p    = getPos(e);
+    const scale = Math.max(W / userImage.width, H / userImage.height) * zoomLevel;
+    const dw   = userImage.width  * scale;
+    const dh   = userImage.height * scale;
+    imgOffsetX = Math.min(0, Math.max(W - dw, p.x - dragStartX));
+    imgOffsetY = Math.min(0, Math.max(H - dh, p.y - dragStartY));
+    drawFrame();
   });
-  window.addEventListener('mouseup', () => { if(!isDragging)return; isDragging=false; canvas.style.cursor='grab'; });
-  canvas.addEventListener('touchstart', (e) => {
-    if (!userImage) return; e.preventDefault(); isDragging=true; const pos=getTouchPos(e); dragStartX=pos.x-imgOffsetX; dragStartY=pos.y-imgOffsetY;
-  }, {passive:false});
-  canvas.addEventListener('touchmove', (e) => {
-    if (!isDragging) return; e.preventDefault(); const pos=getTouchPos(e); imgOffsetX=pos.x-dragStartX; imgOffsetY=pos.y-dragStartY; drawFrameWithOffset();
-  }, {passive:false});
-  canvas.addEventListener('touchend', () => { isDragging=false; });
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    canvas.style.cursor = 'grab';
+  });
 
+  canvas.addEventListener('touchstart', (e) => {
+    if (!userImage) return;
+    e.preventDefault();
+    isDragging = true;
+    const p = getTouchPos(e);
+    dragStartX = p.x - imgOffsetX;
+    dragStartY = p.y - imgOffsetY;
+  }, { passive: false });
+  canvas.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const p    = getTouchPos(e);
+    const scale = Math.max(W / userImage.width, H / userImage.height) * zoomLevel;
+    const dw   = userImage.width  * scale;
+    const dh   = userImage.height * scale;
+    imgOffsetX = Math.min(0, Math.max(W - dw, p.x - dragStartX));
+    imgOffsetY = Math.min(0, Math.max(H - dh, p.y - dragStartY));
+    drawFrame();
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { isDragging = false; });
+
+  // ── Download ──
   downloadBtn.addEventListener('click', () => {
-    drawFrameWithOffset();
-    ctx.clearRect(0, W-14, W, 14);
-    drawFrameWithOffset();
-    const link = document.createElement('a');
-    link.download = 'twibon-nabila-18th.png';
+    drawFrame();
+    const link    = document.createElement('a');
+    link.download = 'twibon-nabila18th-nieboz.png';
     link.href     = canvas.toDataURL('image/png');
     link.click();
   });
