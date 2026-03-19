@@ -68,7 +68,7 @@ document.addEventListener('mousemove', (e) => {
   const dist = distanceToBtnCenter(e.clientX, e.clientY);
 
   if (dist < FLEE_RADIUS && !isHidden) {
-    // Cursor deket — langsung hilang
+ 
     isHidden = true;
     nopeBtn.style.transition = 'opacity 0.15s ease';
     nopeBtn.style.opacity    = '0';
@@ -77,7 +77,7 @@ document.addEventListener('mousemove', (e) => {
     escapeTries++;
     if (escapeTries === 3)  nopeBtn.textContent = 'Jangan gitu gila!';
     if (escapeTries === 6)  nopeBtn.textContent = 'STOP!!';
-    if (escapeTries === 10) nopeBtn.textContent = '🖕🏻';
+    if (escapeTries === 10) nopeBtn.textContent = 'fak';
 
     // Setelah cursor menjauh, muncul lagi
     setTimeout(() => {
