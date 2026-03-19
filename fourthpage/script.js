@@ -112,14 +112,14 @@ const poemData = [
   { text: 'Aku tidak tahu ke mana waktu akan membawa langkah kita setelah ini,',                    type: 'normal' },
   { text: 'tapi ada satu hal yang tetap tinggal —',                                                 type: 'normal' },
   { text: '',                                                                                        type: 'spacer' },
-  { text: 'beberapa perjalanan terasa lebih ringan,',                                               type: 'normal' },
+  { text: 'beberapa perjalanan mungkin terasa lebih menyenangkan,',                                               type: 'normal' },
   { text: 'karena pernah ada kamu di dalamnya.',                                                    type: 'normal' },
   { text: '',                                                                                        type: 'spacer' },
   { text: 'Dan di antara semua kenangan yang tersisa,',                                             type: 'normal' },
   { text: 'aku menyadari ada luka yang tak sempat kusadari saat itu, dan ada pula yang sebenarnya kutahu, namun tetap kulakukan.',                         type: 'normal' },
   { text: '',                                                                                        type: 'spacer' },
   { text: 'Untuk semua hal yang pernah membuatmu merasa tidak baik-baik saja,',                     type: 'normal' },
-  { text: 'aku ingin meminta maaf dengan tulus.',                                                   type: 'bold'   },
+  { text: 'aku sungguh ingin meminta maaf dengan tulus.',                                                   type: 'bold'   },
   { text: '',                                                                                        type: 'spacer' },
   { text: 'Bukan untuk mengubah apa yang telah terjadi,',                                           type: 'italic' },
   { text: 'melainkan sebagai bentuk kejujuran yang seharusnya sudah lama kusampaikan.',             type: 'italic' },
@@ -130,7 +130,7 @@ const poemData = [
   { text: 'Dan meski kini perjalanan kita tidak lagi berjalan beriringan,',                         type: 'normal' },
   { text: '',                                                                                        type: 'spacer' },
   { text: 'aku hanya ingin menyampaikan satu hal —',                                                type: 'normal' },
-  { text: 'Terima kasih karena pernah menjadi bayangan yang indah buatku.',                                type: 'bold'   },
+  { text: 'Terima kasih karena pernah menjadi bayangan yang indah untukku.',                                type: 'bold'   },
 ];
 
 // ============================================================
