@@ -5,9 +5,9 @@ alert ('Selamat datang!');
   var nama = prompt('Masukan Nama :');
   alert('Haloo ' + nama);
 
-  lagi = confirm('Tulis ulang nama?');
+  lagi = confirm('Ingin Tulis ulang nama?');
  }
- alert('Thanks! ' + nama);
+ alert('Thanks ' + nama + '. ' + 'Hope you enjoy it!');
 
 const envelope = document.getElementById('envelope');
 const paper    = document.getElementById('paper');
