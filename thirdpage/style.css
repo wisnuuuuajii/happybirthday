@@ -505,29 +505,6 @@ body {
 .snbp-msg strong { color: #7ec8ff; }
 .snbp-msg em { color: rgba(200,230,255,0.62); font-style: italic; }
 
-/* ===== BUTTON KE FOURTHPAGE — SURAT DIIKET ===== */
-.btn-letter-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 8px;
-  animation: fadeUp 0.6s ease 1.1s both;
-}
-
-.btn-letter {
-  position: relative;
-  background: none;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  padding: 0;
-  width: 160px;
-  height: 130px;
-  transition: transform 0.3s cubic-bezier(.36,2,.6,1);
-}
-.btn-letter:hover { transform: translateY(-6px) scale(1.06); }
 .btn-letter:active { transform: scale(0.96); }
 
 /* Envelope body */
@@ -1114,4 +1091,104 @@ body {
   color: rgba(255,255,255,0.28);
   letter-spacing: 0.04em;
   animation: fadeUp 0.4s ease 0.75s both;
+}
+
+/* ============================================================
+   CSS BULAN SABIT EMOJI — hapus .btn-letter / .btn-scroll lama
+   paste ini di bagian bawah style.css thirdpage
+   ============================================================ */
+
+.btn-moon-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  position: relative;
+  animation: fadeUp 0.6s ease 1.1s both;
+}
+
+/* Sparkle melayang acak di sekitar bulan */
+.moon-sparkle {
+  position: absolute;
+  font-size: 13px;
+  color: rgba(180,220,255,0.75);
+  text-shadow: 0 0 8px rgba(126,200,255,0.9);
+  pointer-events: none;
+  opacity: 0;
+  animation: moonSparkleFloat ease-in-out infinite;
+}
+/* posisi sparkle acak pakai nth-child */
+.moon-sparkle:nth-child(1) { top: -18px; left: 42%; }
+.moon-sparkle:nth-child(2) { top: 12px;  right: -18px; }
+.moon-sparkle:nth-child(3) { bottom: 40px; right: -14px; }
+.moon-sparkle:nth-child(4) { top: 18px;  left: -18px; }
+.moon-sparkle:nth-child(5) { bottom: 38px; left: -12px; }
+
+@keyframes moonSparkleFloat {
+  0%,100% { opacity: 0;    transform: scale(0.5) translateY(0); }
+  50%     { opacity: 0.85; transform: scale(1.2) translateY(-6px); }
+}
+
+/* Tombol bulan */
+.btn-moon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 72px;
+  line-height: 1;
+  padding: 10px;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(.36,2,.6,1), filter 0.3s;
+  filter:
+    drop-shadow(0 0 16px rgba(126,200,255,0.55))
+    drop-shadow(0 0 32px rgba(74,158,255,0.25));
+  animation: moonFloat 3.5s ease-in-out infinite alternate;
+  position: relative;
+}
+
+@keyframes moonFloat {
+  from { transform: translateY(0px) rotate(-5deg); }
+  to   { transform: translateY(-8px) rotate(5deg); }
+}
+
+.btn-moon:hover {
+  filter:
+    drop-shadow(0 0 26px rgba(126,200,255,0.85))
+    drop-shadow(0 0 50px rgba(74,158,255,0.5));
+  transform: scale(1.12) translateY(-4px);
+}
+
+/* Spin saat diklik */
+.btn-moon.spinning {
+  animation: moonSpin 0.65s cubic-bezier(.36,.07,.19,.97) forwards !important;
+}
+@keyframes moonSpin {
+  0%   { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 16px rgba(126,200,255,0.55)); }
+  40%  { transform: rotate(200deg) scale(1.18); filter: drop-shadow(0 0 44px rgba(126,200,255,1)); }
+  100% { transform: rotate(360deg) scale(0.9);  filter: drop-shadow(0 0 8px rgba(126,200,255,0.3)); }
+}
+
+/* Label */
+.btn-moon-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 14px;
+  color: rgba(160,210,255,0.80);
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 12px rgba(74,158,255,0.5);
+  animation: moonLabelPulse 3s ease-in-out 2s infinite;
+}
+@keyframes moonLabelPulse {
+  0%,100% { opacity: 0.7; }
+  50%     { opacity: 1; color: #b8e0ff; text-shadow: 0 0 18px rgba(74,158,255,0.85); }
+}
+
+.btn-moon-sub {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(126,200,255,0.35);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
