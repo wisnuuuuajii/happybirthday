@@ -108,6 +108,39 @@ body {
   50%     { transform: translateY(-12px) rotate(4deg); }
 }
 
+/* ===== 2 BUTTON WRAPPER ===== */
+.btn-greet-wrap {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 0.5s ease 1.2s both;
+}
+
+/* ===== BUTTON GA LANJUT ===== */
+.btn-nope {
+  padding: 13px 28px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  border-radius: 50px;
+  background: rgba(255,255,255,0.06);
+  font-family: 'Fredoka One', cursive;
+  font-size: 16px;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  /* Penting: position akan di-override jadi fixed saat kabur */
+  position: relative;
+  z-index: 10;
+}
+.btn-nope:hover {
+  border-color: rgba(255,110,180,0.4);
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,110,180,0.08);
+}
+
 /* ===== PHASE 2 — MISSION ===== */
 .section-title {
   font-family: 'Fredoka One', cursive;
@@ -200,8 +233,6 @@ body {
     0 0 60px rgba(255,110,180,0.15);
   position: relative;
 }
-
-/* spinning arc */
 .countdown-ring::before {
   content: '';
   position: absolute; inset: -3px;
@@ -211,9 +242,7 @@ body {
   border-right-color: rgba(255,110,180,0.3);
   animation: spinRing 1s linear infinite;
 }
-@keyframes spinRing {
-  to { transform: rotate(360deg); }
-}
+@keyframes spinRing { to { transform: rotate(360deg); } }
 
 .countdown-num {
   font-family: 'Fredoka One', cursive;
@@ -242,7 +271,6 @@ body {
   font-size: 17px; cursor: pointer;
   letter-spacing: 0.4px;
   transition: transform 0.18s, box-shadow 0.18s;
-  animation: fadeUp 0.5s ease 1.2s both;
 }
 .btn-pink:hover, .btn-yellow:hover {
   transform: translateY(-4px) scale(1.05);
@@ -260,7 +288,7 @@ body {
   background: linear-gradient(135deg, var(--yellow), #ffaa00);
   color: #7a3800;
   box-shadow: 0 8px 26px rgba(255,170,0,0.4);
-  animation-delay: 0.6s;
+  animation: fadeUp 0.5s ease 0.6s both;
 }
 .btn-yellow:hover { box-shadow: 0 14px 34px rgba(255,170,0,0.55); }
 
@@ -270,7 +298,6 @@ body {
   to   { opacity:1; transform:translateY(0); }
 }
 
-/* confetti */
 .cf {
   position: fixed; pointer-events:none; z-index:999;
   border-radius: 2px;

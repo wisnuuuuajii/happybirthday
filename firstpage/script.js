@@ -30,8 +30,6 @@ for (let i = 0; i < 65; i++) {
   `;
   document.body.appendChild(s);
 }
-
-// twinkle keyframe
 const ks = document.createElement('style');
 ks.textContent = `
   @keyframes twinkle {
@@ -46,6 +44,87 @@ document.head.appendChild(ks);
 // ============================================================
 document.getElementById('startBtn').addEventListener('click', () => {
   switchPhase('phaseGreet', 'phaseMission');
+});
+
+// ============================================================
+// BUTTON "GA LANJUT" — kabur waktu cursor mendekat
+// ============================================================
+const nopeBtn   = document.getElementById('nopeBtn');
+let nopeClicked = false;
+let escapeTries = 0;
+let isHidden    = false;
+
+const FLEE_RADIUS = 55;
+
+function distanceToBtnCenter(mouseX, mouseY) {
+  const rect = nopeBtn.getBoundingClientRect();
+  const cx   = rect.left + rect.width  / 2;
+  const cy   = rect.top  + rect.height / 2;
+  return Math.hypot(mouseX - cx, mouseY - cy);
+}
+
+document.addEventListener('mousemove', (e) => {
+  if (nopeClicked) return;
+  const dist = distanceToBtnCenter(e.clientX, e.clientY);
+
+  if (dist < FLEE_RADIUS && !isHidden) {
+    // Cursor deket — langsung hilang
+    isHidden = true;
+    nopeBtn.style.transition = 'opacity 0.15s ease';
+    nopeBtn.style.opacity    = '0';
+    nopeBtn.style.pointerEvents = 'none';
+
+    escapeTries++;
+    if (escapeTries === 3)  nopeBtn.textContent = 'Jangan gitu gila!';
+    if (escapeTries === 6)  nopeBtn.textContent = 'STOP!!';
+    if (escapeTries === 10) nopeBtn.textContent = '🖕🏻';
+
+    // Setelah cursor menjauh, muncul lagi
+    setTimeout(() => {
+      if (!nopeClicked) {
+        isHidden = false;
+        nopeBtn.style.opacity       = '1';
+        nopeBtn.style.pointerEvents = 'auto';
+      }
+    }, 800);
+  }
+});
+
+// Touch support
+document.addEventListener('touchmove', (e) => {
+  if (nopeClicked) return;
+  const t    = e.touches[0];
+  const dist = distanceToBtnCenter(t.clientX, t.clientY);
+  if (dist < FLEE_RADIUS && !isHidden) {
+    isHidden = true;
+    nopeBtn.style.transition    = 'opacity 0.15s ease';
+    nopeBtn.style.opacity       = '0';
+    nopeBtn.style.pointerEvents = 'none';
+    setTimeout(() => {
+      if (!nopeClicked) {
+        isHidden = false;
+        nopeBtn.style.opacity       = '1';
+        nopeBtn.style.pointerEvents = 'auto';
+      }
+    }, 800);
+  }
+}, { passive: true });
+
+// Kalau berhasil diklik — fadeout pelan sambil "nyerah"
+nopeBtn.addEventListener('click', () => {
+  if (nopeClicked) return;
+  nopeClicked = true;
+
+  nopeBtn.textContent = 'BYE😜';
+  nopeBtn.style.pointerEvents = 'none';
+  nopeBtn.style.transition    = 'opacity 1.8s ease, transform 1.8s ease';
+  nopeBtn.style.opacity       = '0';
+  nopeBtn.style.transform     = 'scale(0.6) translateY(20px)';
+
+  // Setelah fadeout selesai, hapus dari DOM
+  setTimeout(() => {
+    nopeBtn.remove();
+  }, 1900);
 });
 
 // ============================================================
@@ -65,7 +144,7 @@ const subs = [
   'Siapkan jarimu, Zezell!',
   'Good Luck!'
 ];
-const colors = ['', '#72efdd', '#ffe066', '#ff6eb4'];
+const colors   = ['', '#72efdd', '#ffe066', '#ff6eb4'];
 const cfColors = ['#ff4d6d','#ffbe0b','#ff6eb4','#c77dff','#72efdd','#ffe066','#fff'];
 
 function startCountdown() {
@@ -81,8 +160,6 @@ function startCountdown() {
 
     if (n <= 0) {
       clearInterval(iv);
-
-      // "GO!" state
       numEl.style.animation = 'none';
       numEl.offsetHeight;
       numEl.style.animation = 'numPop 0.35s cubic-bezier(.36,2,.6,1) both';
@@ -93,7 +170,6 @@ function startCountdown() {
 
       spawnConfetti(90);
 
-      // Navigate after short pause
       setTimeout(() => {
         document.body.style.transition = 'opacity 0.45s ease';
         document.body.style.opacity    = '0';
@@ -105,7 +181,6 @@ function startCountdown() {
       return;
     }
 
-    // Re-trigger pop animation
     numEl.style.animation = 'none';
     numEl.offsetHeight;
     numEl.style.animation = 'numPop 0.4s cubic-bezier(.36,2,.6,1) both';
