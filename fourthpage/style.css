@@ -52,23 +52,6 @@ body {
   to   { box-shadow: 0 0 60px rgba(240,210,100,0.55), 0 0 130px rgba(240,210,100,0.25), inset -8px -6px 0 rgba(140,100,0,0.25); }
 }
 
-/* ===== METEOR ===== */
-.meteor {
-  position: fixed; z-index: 1; pointer-events: none;
-  width: 2px; height: 80px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.9), transparent);
-  border-radius: 2px;
-  opacity: 0;
-}
-#meteor1 { top: 10%; left: 20%; transform: rotate(25deg); animation: meteorFall 8s ease-in 2s infinite; }
-#meteor2 { top: 5%;  left: 60%; transform: rotate(25deg); animation: meteorFall 8s ease-in 5s infinite; }
-@keyframes meteorFall {
-  0%   { opacity: 0; transform: rotate(25deg) translateY(-20px); }
-  5%   { opacity: 1; }
-  20%  { opacity: 0; transform: rotate(25deg) translateY(120px); }
-  100% { opacity: 0; transform: rotate(25deg) translateY(120px); }
-}
-
 /* ===== MUSIC BTN ===== */
 #musicBtn {
   position: fixed; top: 16px; right: 18px; z-index: 200;

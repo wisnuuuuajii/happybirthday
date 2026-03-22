@@ -65,6 +65,58 @@ function drawStars() {
 drawStars();
 
 // ============================================================
+// STAR LAYER 2 - FASTER SMALL STARS
+// ============================================================
+const canvas2 = document.createElement('canvas');
+const ctx2 = canvas2.getContext('2d');
+canvas2.id = 'starCanvas2';
+canvas2.style.position = 'fixed';
+canvas2.style.top = '0';
+canvas2.style.left = '0';
+canvas2.style.pointerEvents = 'none';
+canvas2.style.zIndex = '1';
+document.body.appendChild(canvas2);
+
+let fastStars = [];
+
+function resizeCanvas2() {
+  canvas2.width = window.innerWidth;
+  canvas2.height = window.innerHeight;
+}
+resizeCanvas2();
+window.addEventListener('resize', resizeCanvas2);
+
+function initFastStars() {
+  fastStars = [];
+  for (let i = 0; i < 300; i++) {
+    fastStars.push({
+      x: Math.random() * canvas2.width,
+      y: Math.random() * canvas2.height,
+      r: Math.random() * 0.8 + 0.1,
+      alpha: Math.random(),
+      speed: Math.random() * 0.015 + 0.008
+    });
+  }
+}
+initFastStars();
+
+function drawFastStars() {
+  ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+  fastStars.forEach(s => {
+    s.alpha += s.speed * (Math.sin(Date.now() * 0.001 + s.x) > 0 ? 1 : -1);
+    if (s.alpha > 1) s.alpha = 1;
+    if (s.alpha < 0.1) s.alpha = 0.1;
+    
+    ctx2.beginPath();
+    ctx2.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx2.fillStyle = `rgba(255,255,255,${s.alpha * 0.6})`;
+    ctx2.fill();
+  });
+  requestAnimationFrame(drawFastStars);
+}
+drawFastStars();
+
+// ============================================================
 // INTRO TYPEWRITER
 // ============================================================
 const introOverlay = document.getElementById('introOverlay');
@@ -307,3 +359,109 @@ function spawnStarDust() {
     }, i * 80);
   }
 }
+
+function spawnMeteor() {
+  const meteor = document.createElement('div');
+  meteor.style.cssText = `
+    position: fixed;
+    z-index: 1;
+    pointer-events: none;
+    width: 2px;
+    height: ${60 + Math.random() * 60}px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.92), transparent);
+    border-radius: 2px;
+    opacity: 0;
+    top: ${Math.random() * 40}%;
+    left: ${Math.random() * 90}%;
+    transform: rotate(${20 + Math.random() * 15}deg);
+  `;
+ 
+  document.body.appendChild(meteor);
+ 
+  // Animasi manual pakai keyframes inject
+  const id = 'mf_' + Date.now() + Math.floor(Math.random() * 9999);
+  const dist = 100 + Math.random() * 80;
+  const dur  = 0.6 + Math.random() * 0.5;
+ 
+  const kf = document.createElement('style');
+  kf.textContent = `
+    @keyframes ${id} {
+      0%   { opacity: 0;   transform: rotate(25deg) translateY(-10px); }
+      8%   { opacity: 0.9; }
+      100% { opacity: 0;   transform: rotate(25deg) translateY(${dist}px); }
+    }
+  `;
+  document.head.appendChild(kf);
+ 
+  meteor.style.animation = `${id} ${dur}s ease-in forwards`;
+ 
+  // Hapus setelah selesai
+  setTimeout(() => {
+    meteor.remove();
+    kf.remove();
+  }, dur * 1000 + 100);
+}
+ 
+function spawnMeteor() {
+  const meteor = document.createElement('div');
+  meteor.style.cssText = `
+    position: fixed;
+    z-index: 1;
+    pointer-events: none;
+    width: 2px;
+    height: ${60 + Math.random() * 60}px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.92), transparent);
+    border-radius: 2px;
+    opacity: 0;
+    top: ${Math.random() * 40}%;
+    left: ${Math.random() * 90}%;
+    transform: rotate(${20 + Math.random() * 15}deg);
+  `;
+ 
+  document.body.appendChild(meteor);
+ 
+  // Animasi manual pakai keyframes inject
+  const id = 'mf_' + Date.now() + Math.floor(Math.random() * 9999);
+  const dist = 100 + Math.random() * 80;
+  const dur  = 1.2 + Math.random() * 0.8;
+ 
+  const kf = document.createElement('style');
+  kf.textContent = `
+    @keyframes ${id} {
+      0%   { opacity: 0;   transform: rotate(25deg) translateY(-10px); }
+      8%   { opacity: 0.9; }
+      100% { opacity: 0;   transform: rotate(25deg) translateY(${dist}px); }
+    }
+  `;
+  document.head.appendChild(kf);
+ 
+  meteor.style.animation = `${id} ${dur}s ease-in forwards`;
+ 
+  // Hapus setelah selesai
+  setTimeout(() => {
+    meteor.remove();
+    kf.remove();
+  }, dur * 1000 + 100);
+}
+ 
+// Jalankan meteor pertama setelah 2 detik
+// lalu terus spawn dengan interval random 3–8 detik
+function startMeteors() {
+  function scheduleNext() {
+    const delay = 5000 + Math.random() * 7000; // 5–12 detik
+    setTimeout(() => {
+      spawnMeteor();
+      // Kadang spawn 2 sekaligus buat efek lebih dramatis
+      if (Math.random() > 0.65) {
+        setTimeout(spawnMeteor, 200 + Math.random() * 300);
+      }
+      scheduleNext();
+    }, delay);
+  }
+ 
+  // Meteor pertama
+  setTimeout(spawnMeteor, 2000);
+  scheduleNext();
+}
+ 
+startMeteors();
