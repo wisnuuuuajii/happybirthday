@@ -603,16 +603,6 @@ function initTwibon() {
     if (frameImage) {
       ctx.drawImage(frameImage, 0, 0, W, H);
     }
-
-    // Hint teks
-    if (userImage) {
-      ctx.save();
-      ctx.textAlign  = 'center';
-      ctx.font       = '600 11px "Nunito",sans-serif';
-      ctx.fillStyle  = 'rgba(255,255,255,0.3)';
-      ctx.fillText('✥ drag geser · slider zoom', W/2, H - 8);
-      ctx.restore();
-    }
   }
 
   // ── Tombol zoom + - ──
