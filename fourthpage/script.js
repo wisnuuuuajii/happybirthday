@@ -250,7 +250,7 @@ function showOutro() {
         <div class="outro-line-1">Tidak semua langkah harus terus bersama,</div>
         <div class="outro-line-2">Tapi beberapa bayangan akan selalu tinggal di ingatan.</div>
         <div class="outro-moon">🌙</div>
-        <div class="outro-sender">Untukmu, Nabila.<br>Buah Hati dari Ayah Rahman dan Bunda Indah.</div>
+        <div class="outro-sender">Untukmu, Nabila.<br>Buah Hati dari Ayah SUJAPTOO dan Bunda Indah.</div>
       </div>
     `;
     document.body.appendChild(outro);
