@@ -84,7 +84,7 @@ const progressBar   = document.getElementById('progressBar');
 
 let catchScore    = 0;
 const catchTarget = 24;
-let catchTimeLeft = 30;
+let catchTimeLeft = 3000000;
 let gameInterval, timerInterval;
 let catchActive   = false;
 
@@ -107,11 +107,11 @@ function playPop() {
 
 function startCatchGame() {
     catchScore    = 0;
-    catchTimeLeft = 30;
+    catchTimeLeft = 3000000;
     catchActive   = true;
 
     scoreDisplay.textContent = 0;
-    timerDisplay.textContent = 30;
+    timerDisplay.textContent = 3000000;
     timerPill.classList.remove('danger');
     progressBar.style.width = '0%';
     p1message.textContent   = '';
